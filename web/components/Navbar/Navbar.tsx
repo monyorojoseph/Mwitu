@@ -1,5 +1,7 @@
 import Link from 'next/link';
 import { AiOutlineAppstoreAdd } from 'react-icons/ai';
+import { useSession } from 'next-auth/react';
+import Auth from './Auth';
 
 export default function Navbar(){
     return(
@@ -23,9 +25,7 @@ export default function Navbar(){
                 </div>
                 {/* login/signup */}
                 <div className="col-span-2">
-                    <button
-                    className="border border-GhostWhite rounded-md py-1 px-4 font-semibold"
-                    >Sign Up</button>
+                    <Auth />
                 </div>
             </div>
         </nav>

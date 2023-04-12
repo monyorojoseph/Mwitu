@@ -4,6 +4,7 @@ import { useSession } from 'next-auth/react';
 import Auth from './Auth';
 
 export default function Navbar(){
+    // const id = process.env.ne
     return(
         <nav className="bg-Jet text-GhostWhite py-3 sticky top-0">
             <div className="mx-auto w-10/12

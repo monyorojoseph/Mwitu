@@ -94,6 +94,8 @@ export default NextAuth({
         if (account) {
           token.accessToken = account.access_token
           token.idToken = account.id_token
+          console.log('[ TOKEN ]', token)
+          console.log('[ ACCOUNT ]', account)
         }
         return token
       },

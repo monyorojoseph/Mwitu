@@ -31,7 +31,7 @@ class Review(models.Model):
 class Rating(models.Model):
     user = models.ForeignKey('account.CustomUser', related_name='user_ratings', on_delete=models.SET_NULL, null=True)
     site = models.ForeignKey('Site',  related_name='site_ratings', on_delete=models.CASCADE)
-    stars = models.PositiveSmallIntegerField(default=0, validators=[MaxValueValidator(limit_value=5)])
+    stars = models.PositiveSmallIntegerField(default=1, validators=[MaxValueValidator(limit_value=5)])
     
     def __str__(self) -> str:
         return f"{self.stars} on {self.site.name} from {self.user.email}"

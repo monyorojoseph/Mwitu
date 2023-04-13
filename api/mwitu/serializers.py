@@ -1,17 +1,12 @@
 from rest_framework import serializers
 from .models import Site, Review, Rating
 
-class SiteSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Site
-        fields = "__all__"
+class CreateSiteSerializer(serializers.Serializer):
+    image = serializers.ImageField()
+    name = serializers.CharField()
+    url = serializers.URLField()
+    about = serializers.CharField()
 
-class ReviewSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Review
-        fields = "__all__"
-
-class RatingSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Rating
-        fields = "__all__"
+    def create(self, validated_data):
+        print(validated_data)
+        return Site.objects.create(**validated_data)

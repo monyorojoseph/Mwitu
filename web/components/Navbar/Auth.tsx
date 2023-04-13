@@ -8,12 +8,10 @@ export default function Auth(){
     const handleGoogleSignIn = async()=>{
         // @ts-ignore
         const data = await googleSignIn(session.idToken);
-        console.log(data)
 
     }
 
     useEffect(()=> {
-        console.log(session)
         // @ts-ignore
         if(session?.provider === "google"){
             handleGoogleSignIn()

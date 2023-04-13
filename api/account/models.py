@@ -43,8 +43,8 @@ class CustomUser(AbstractBaseUser):
     EMAIL = 'Email'
 
     PROVIDERS = [
-        (GOOGLE,  'Google'),
-        (EMAIL,  'Email')
+        (GOOGLE,  'google'),
+        (EMAIL,  'email')
     ]
     
     provider = models.CharField(max_length=50, choices=PROVIDERS, default=GOOGLE)

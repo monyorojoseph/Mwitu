@@ -73,7 +73,7 @@
 //   debug: true,
 // })
 
-import NextAuth, { DefaultSession } from "next-auth";
+import NextAuth, { DefaultSession, Account } from "next-auth";
 import GoogleProvider from "next-auth/providers/google"
 
 interface SessionExtension extends DefaultSession {
@@ -94,19 +94,19 @@ export default NextAuth({
         if (account) {
           token.accessToken = account.access_token
           token.idToken = account.id_token
-          console.log('[ TOKEN ]', token)
-          console.log('[ ACCOUNT ]', account)
+          token.provider = account.provider
         }
         return token
       },
       async session({ session, token }) {
         // Send properties to the client, like an access_token from a provider.
         //@ts-ignore
-        session.accessToken = token.accessToken
+        session.provider = token.provider
         //@ts-ignore
         session.idToken = token.idToken
 
         return session
       }
-    }
+    },
+    debug: false,
 });

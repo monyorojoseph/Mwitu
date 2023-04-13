@@ -139,7 +139,11 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3080",
-    "http://127.0.0.1:3000",
-]
+# CORS_ALLOWED_ORIGINS = [
+#     "http://localhost:3080",
+#     "http://127.0.0.1:3000",
+# ]
+CORS_ALLOW_ALL_ORIGINS = True
+
+GOOGLE_CLIENT_ID = '938216209317-n1l95pfge34vhd8nn7o2flgphp64s8sj.apps.googleusercontent.com'
+SOCIAL_SECRET = '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'

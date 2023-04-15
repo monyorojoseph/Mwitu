@@ -7,26 +7,19 @@ import { BsCardImage } from 'react-icons/bs'
 
 export default function Add(){
     const router = useRouter()
-    const [ about, setAbout] = useState<string>('')
-    const [ name, setName] = useState<string>('')
-    const [ url, setUrl] = useState<string>('')
-    const [ image, setImage ] = useState<any>()
     const [ loading, setLoading ] = useState<boolean>(false)
 
     const onSubmitHandler = async(e: React.SyntheticEvent)=> {
         e.preventDefault()
         setLoading(true)
-        const formData = new FormData()
-        formData.append('name', name)
-        formData.append('about', about)
-        formData.append('url', url)
-        formData.append('image', image)
-
+        const form = document.getElementById('form');
+        // @ts-ignore
+        const formData = new FormData(form)
         const resp = await createSite(formData) as AxiosResponse;
         setLoading(false)
         if(resp?.status === 200){
             console.log(resp.data)
-            // router.
+            router.push('/')
         }
     }
 
@@ -35,7 +28,7 @@ export default function Add(){
             <>
                 <section className="space-y-3 mt-5 mb-10">
                     {/* form */}
-                    <form className="space-y-3" onSubmit={onSubmitHandler}>
+                    <form className="space-y-3" onSubmit={onSubmitHandler} id="form">
                         <div className="grid grid-cols-6 gap-3">
 
                         <div className="col-span-6">
@@ -53,8 +46,7 @@ export default function Add(){
                                          focus-within:ring-offset-2 hover:text-PrincetonOrange"
                                         >
                                         <span>Upload a file</span>
-                                        <input id="file-upload" name="logo" type="file" className="sr-only" required 
-                                        onChange={(e)=> setImage(e.target.value)}/>
+                                        <input id="file-upload" name="cover_image" type="file" className="sr-only" required />
                                         </label>
                                         <p className="pl-1">or drag and drop</p>
                                     </div>
@@ -75,8 +67,6 @@ export default function Add(){
                                     type="text"
                                     name="name"
                                     autoComplete="website-name"
-                                    value={name}
-                                    onChange={(e)=> setName(e.target.value)}
                                     required
                                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 bg-GhostWhite
                                     ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset 
@@ -94,8 +84,6 @@ export default function Add(){
                                     type="url"
                                     name="url"
                                     autoComplete="website-url"
-                                    value={url}
-                                    onChange={(e)=> setUrl(e.target.value)}
                                     required
                                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 bg-GhostWhite
                                     ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset
@@ -114,10 +102,8 @@ export default function Add(){
                                 <textarea
                                 name="about"
                                 rows={3}
-                                onChange={(e)=> setAbout(e.target.value)}
                                 className="block w-full rounded-md border-0 text-Night shadow-sm ring-1 ring-inset p-2 bg-GhostWhite
                                 ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-Night"
-                                defaultValue={about}
                                 required
                                 placeholder="Write something ..."
                                 />

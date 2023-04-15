@@ -1,15 +1,9 @@
-import axios from "axios";
+import axiosInstance from "@/utils/axios"
 
-
-const config = {
-    headers: {
-        "Content-Type": "application/json"
-    }
-}
 
 export async function googleSignIn(auth_token: string){
     try{
-        const { data } = await axios.post('http://localhost:8000/account/google/', { auth_token }, config)  
+        const { data } = await axiosInstance.post('/account/google/', { auth_token })  
         return data      
     }catch(e){
         console.log(e)

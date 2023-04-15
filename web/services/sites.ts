@@ -1,13 +1,9 @@
-import axios from "axios";
+import axiosInstance from "@/utils/axios";
 
-const config = {
-    headers: {
-        'Content-Type': 'multipart/form-data'
-    }
-}
 export async function createSite(formData:any) {
     try{
-        const response = await axios.post('http://localhost:8000/mwitu/create-site/', formData, config);
+        axiosInstance.defaults.headers.common['Content-Type'] = 'multipart/form-data';
+        const response = await axiosInstance.post('/mwitu/create-site/', formData);
         return response
     }catch(e){
         console.log(e)

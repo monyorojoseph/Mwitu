@@ -5,6 +5,8 @@ import { useState } from "react";
 import { BiUpvote, BiDownvote,  } from 'react-icons/bi';
 import { TbWorldWww } from 'react-icons/tb';
 import { HiOutlineMail } from 'react-icons/hi'
+import { useRouter } from "next/router";
+import { useSitesDetails } from "@/hooks/swr/siteDetails";
 // import BreadCrumb from "@/components/Breadcrumb/Breadcrumb";
 
 export default function Site(){
@@ -55,20 +57,24 @@ function RatingValues(){
 }
 
 function SiteDetails(){
+    const router = useRouter()
+    const { id } = router.query;
+    const { site, loading } = useSitesDetails(id as string)
+    
     return(<>
-    <div className="border rounded-md mb-3 divide-y">
+    {!loading && (<div className="border rounded-md mb-3 divide-y">
         <div className="py-1 px-3 text-lg font-semibold">
-            Food Market
+            {site.name}
         </div>
-        <div className="py-1 px-3">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Laboriosam aliquid officia error! 
-        Qui ratione sapiente maxime ut cumque numquam iste corporis dolore saepe error eius voluptate nihil, voluptates totam excepturi.</div>
+        <div className="py-1 px-3">{site.about}</div>
         <div className="py-1 px-3">
             <TbWorldWww className="text-2xl font-semibold"/>
         </div>
-        <div className="py-1 px-3">
+        {/* <div className="py-1 px-3">
             <HiOutlineMail className="text-2xl font-semibold"/>
-        </div>
-    </div></>)
+        </div> */}
+    </div>)}
+    {loading && ( <h2>Loading</h2> )}</>)
 }
 
 function Sponser(){
@@ -101,6 +107,10 @@ function ReviewContainer(){
 }
 
 function Reviews(){
+
+    const router = useRouter()
+    const { id } = router.query;
+
     return(
         <>
             <div>
@@ -141,6 +151,10 @@ function Reviews(){
 function LeaveReview(){
     const [ stars, setStars ] = useState<number>(0)
     const [ review, setReview ] = useState<string>('')
+
+    const router = useRouter()
+    const { id } = router.query;
+
     return(
         <>
         <div className="space-y-3">

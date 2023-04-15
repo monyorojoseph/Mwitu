@@ -1,8 +1,8 @@
-import { Site } from "@/constants/types";
+import { SiteCardType } from "@/constants/types";
 import SiteCard from "./SiteCard";
 
 
-export default function ListSites({ sites }: { sites: Site[]}){
+export default function ListSites({ sites }: { sites: SiteCardType[]}){
     return(
         <>
 

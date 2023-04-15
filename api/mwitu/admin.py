@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Site, Review, Rating
+from .models import Site, Review
 
 @admin.register(Site)
 class SiteAdmin(admin.ModelAdmin):
@@ -9,8 +9,3 @@ class SiteAdmin(admin.ModelAdmin):
 class ReviewAdmin(admin.ModelAdmin):
     # list_display = ['name']
     pass
-
-
-@admin.register(Rating)
-class RatingAdmin(admin.ModelAdmin):
-    list_display = ['stars']

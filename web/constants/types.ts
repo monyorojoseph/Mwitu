@@ -1,6 +1,15 @@
-export interface Site {
-    slug: string;
+export interface SiteCardType {
+    id: string;
     name: string;
-    image_url: string;
-    rating: number;
+    cover_image: string;
+    // rating: number;
+}
+
+export interface SiteDetailsType {    
+    name: string;
+    cover_image: string;
+    about: string;
+    url: string;
+    // email: string;
+
 }

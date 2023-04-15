@@ -23,15 +23,8 @@ class Review(models.Model):
     site = models.ForeignKey('Site',  related_name='site_reviews', on_delete=models.CASCADE)
     comment = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
+    rating = models.PositiveSmallIntegerField(default=1, validators=[MaxValueValidator(limit_value=5)])
+
 
     def __str__(self) -> str:
         return f"Review from  {self.user.email} on {self.site.name}"
-
-
-class Rating(models.Model):
-    user = models.ForeignKey('account.CustomUser', related_name='user_ratings', on_delete=models.SET_NULL, null=True)
-    site = models.ForeignKey('Site',  related_name='site_ratings', on_delete=models.CASCADE)
-    stars = models.PositiveSmallIntegerField(default=1, validators=[MaxValueValidator(limit_value=5)])
-    
-    def __str__(self) -> str:
-        return f"{self.stars} on {self.site.name} from {self.user.email}"

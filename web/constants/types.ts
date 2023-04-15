@@ -13,3 +13,8 @@ export interface SiteDetailsType {
     // email: string;
 
 }
+
+export interface Item {
+    label: string;
+    value: string;
+}

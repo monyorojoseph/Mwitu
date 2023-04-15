@@ -7,6 +7,8 @@ import { TbWorldWww } from 'react-icons/tb';
 import { HiOutlineMail } from 'react-icons/hi'
 import { useRouter } from "next/router";
 import { useSitesDetails } from "@/hooks/swr/siteDetails";
+import Filter from "@/components/Filters/Filter";
+import { Item } from "@/constants/types";
 // import BreadCrumb from "@/components/Breadcrumb/Breadcrumb";
 
 export default function Site(){
@@ -106,14 +108,36 @@ function ReviewContainer(){
     )
 }
 
+const Items =  [
+    {
+        label: 'Latest',
+        value: 'latest'
+    },
+    {
+        label: 'Most voted',
+        value: 'mostvoted'
+    },
+    {
+        label: 'Best',
+        value: 'best'
+    },
+    {
+        label: 'Bad',
+        value: 'bad'
+    }
+]
+
 function Reviews(){
 
     const router = useRouter()
     const { id } = router.query;
+    const [ item, setItem ] = useState<Item>(Items[0])
+
 
     return(
         <>
-            <div>
+            <div className="space-y-3">
+                <Filter item={item} setItem={setItem} items={Items}/>
                 <div className="rounded-md border border-gray-300 w-10/12 p-3 space-y-3 shadow-sm">
                     {/* name and time */}
                     <div className="flex flex-row justify-between items-center">

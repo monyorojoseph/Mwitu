@@ -1,4 +1,4 @@
-import NextAuth, { Session} from "next-auth";
+import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google"
 
 export default NextAuth({
@@ -9,16 +9,22 @@ export default NextAuth({
         }),
     ],
     session: {
-      maxAge: 30 * 24 * 60 * 60
+      maxAge: 30 * 24 * 60 * 60,
+      strategy: 'jwt'
 
     },
     callbacks: {
-      async jwt({ token, account }) {
+      async jwt({ token, account, trigger, session }) {
         // Persist the OAuth access_token to the token right after signin
         if (account) {
           token.idToken = account.id_token
           token.provider = account.provider
         }
+        if (trigger === "update" && session?.data) {
+          // Note, that `session` can be any arbitrary object, remember to validate it!
+          token.data = session.data
+        }
+        
         return token
       },
       async session({ session, token }) {
@@ -27,7 +33,10 @@ export default NextAuth({
         session.provider = token.provider
         //@ts-ignore
         session.idToken = token.idToken
-
+        if(token?.data){
+          // @ts-ignore
+          session.access = token.data.tokens.access
+        }
         return session
       }
     },

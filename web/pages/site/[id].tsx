@@ -1,7 +1,7 @@
 import Layout from "@/components/Layout/Layout";
 import RatedBar from "@/components/Ratings/RatedBar";
 import RatingBar from "@/components/Ratings/RatingBar";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BiUpvote, BiDownvote,  } from 'react-icons/bi';
 import { TbWorldWww } from 'react-icons/tb';
 import { HiOutlineMail } from 'react-icons/hi'
@@ -13,6 +13,8 @@ import { useListReviews } from "@/hooks/swr/listReviews";
 import { monthDate } from "@/utils/yearData";
 import { postReview } from "@/services/sites";
 import { AxiosResponse } from "axios";
+import { ReviewsContextProvider, useReviewsContext } from "@/hooks/contexts/reviewsContext";
+import { ReviewItems, ReviewTabs } from "@/constants/values";
 // import BreadCrumb from "@/components/Breadcrumb/Breadcrumb";
 
 export default function Site(){
@@ -92,59 +94,44 @@ function Sponser(){
 }
 
 function ReviewContainer(){
-    const [ tab, setTab ] = useState<string>('reviews')
+    const [ tab, setTab ] = useState<string>(ReviewTabs[0])
     return (
         <>
-            <div>
-                {/* tabs */}
-                <div className="flex flex-row justify-start items-center space-x-3 mb-3">
-                    <span className="bg-Jet py-1 px-3 text-GhostWhite rounded-md 
-                    font-semibold cursor-pointer"
-                    onClick={()=> setTab('reviews')}>Reviews</span>
-                    <span className="bg-Jet py-1 px-3 text-GhostWhite rounded-md 
-                    font-semibold cursor-pointer"
-                    onClick={()=> setTab('leaveReview')}>Leave a review</span>
-                </div>
-                {/* tabs content */}
-                {  tab === 'reviews' && <Reviews />}
-                {  tab === 'leaveReview' && <LeaveReview />}
+            <ReviewsContextProvider>
+                <div>
+                    {/* tabs */}
+                    <div className="flex flex-row justify-start items-center space-x-3 mb-3">
+                        <span className="bg-Jet py-1 px-3 text-GhostWhite rounded-md 
+                        font-semibold cursor-pointer"
+                        onClick={()=> setTab(ReviewTabs[0])}>Reviews</span>
+                        <span className="bg-Jet py-1 px-3 text-GhostWhite rounded-md 
+                        font-semibold cursor-pointer"
+                        onClick={()=> setTab(ReviewTabs[1])}>Leave a review</span>
+                    </div>
+                    {/* tabs content */}
+                    {  tab === ReviewTabs[0] && <Reviews />}
+                    {  tab === ReviewTabs[1] && <LeaveReview setTab={setTab}/>}
 
-            </div>
+                </div>
+            </ReviewsContextProvider>
         </>
     )
 }
 
-const Items =  [
-    {
-        label: 'Latest',
-        value: 'latest'
-    },
-    {
-        label: 'Most voted',
-        value: 'mostvoted'
-    },
-    {
-        label: 'Best',
-        value: 'best'
-    },
-    {
-        label: 'Bad',
-        value: 'bad'
-    }
-]
+
 
 function Reviews(){
 
     const router = useRouter()
     const { id } = router.query;
-    const [ item, setItem ] = useState<Item>(Items[0])
-    const { reviews, loading } = useListReviews(id as string)
+    const { filter, setFilter } = useReviewsContext()
+    const { reviews, loading } = useListReviews(id as string, filter.value)
 
 
     return(
         <>
             <div className="space-y-3">
-                <Filter item={item} setItem={setItem} items={Items}/>
+                <Filter item={filter} setItem={setFilter} items={ReviewItems}/>
                 {!loading && (
 
                     <>
@@ -184,7 +171,7 @@ function Reviews(){
     )
 }
 
-function LeaveReview(){
+function LeaveReview({setTab}:{setTab: Function}){
     const [ stars, setStars ] = useState<number>(0)
     const [ review, setReview ] = useState<string>('')
     const [ loading, setLoading ] = useState<boolean>(false)
@@ -195,11 +182,11 @@ function LeaveReview(){
     const handlePost = async (e:React.SyntheticEvent)=> {
         e.preventDefault()
         setLoading(true)
-        const resp = await postReview({ comment: review, rating: stars}) as AxiosResponse;
+        const resp = await postReview({ comment: review, rating: stars, site_id: id}) as AxiosResponse;
         setLoading(false)
     if ( resp?.status === 201){
         // react toastify
-        console.log(resp)
+        setTab(ReviewTabs[0])
     }
 
     }
@@ -227,7 +214,7 @@ function LeaveReview(){
               <div>
                 <button className="py-1 px-4 text-GhostWhite font-semibold bg-PrimstonGreen disabled:bg-Jet disabled:bg-opacity-30 rounded-md"
                 onClick={handlePost} disabled={review ===  '' && stars === 0}>
-                    Post
+                    {loading ? 'Posting...' : 'Post'}
                 </button>
               </div>
         </div>

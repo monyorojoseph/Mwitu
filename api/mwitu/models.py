@@ -24,6 +24,7 @@ class Site(models.Model):
         return self.site_reviews.aggregate(Avg('rating'))['rating__avg']
 
 class Review(models.Model):
+    id = models.UUIDField(primary_key=True, editable=False, default=uuid.uuid4)
     user = models.ForeignKey('account.CustomUser', related_name='user_reviews', on_delete=models.SET_NULL, null=True)
     site = models.ForeignKey('Site',  related_name='site_reviews', on_delete=models.CASCADE)
     comment = models.TextField()

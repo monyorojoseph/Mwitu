@@ -14,7 +14,7 @@ export default function Navbar(){
                     <Link href={'/'}>
                         <div className='flex flex-row justify-center items-center space-x-2'>
                             <AiFillStar className='text-3xl fill-PrincetonOrange'/>
-                            <h1 className='text-lg font-semibold hover:text-PrincetonOrange'>Sites Mwitu</h1>
+                            <h1 className='text-lg font-semibold hover:text-PrincetonOrange flex-wrap'>Sites Mwitu</h1>
 
                         </div>
                     </Link>

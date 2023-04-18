@@ -32,3 +32,8 @@ class GoogleOAuthSerializer(serializers.Serializer):
 
         return register_social_user(
             provider=provider, email=email, name=name)
+
+class ProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Profile
+        fields = ['emai', 'full_name', 'image']

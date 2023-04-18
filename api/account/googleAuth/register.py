@@ -24,7 +24,7 @@ def register_social_user(provider, email, name):
             return {
                 'email': registered_user.email,
                 'tokens': get_tokens_for_user(registered_user)
-            }
+                }
 
         else:
             raise AuthenticationFailed(
@@ -36,7 +36,7 @@ def register_social_user(provider, email, name):
         }
         user = User.objects.create_user(**user)
         user.is_active = True
-        user.arovider = provider
+        user.provider = provider
         user.save()
         new_user = User.objects.get(email=email)
         Profile.objects.create(user=new_user, email=email, full_name=name)

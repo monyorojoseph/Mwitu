@@ -1,36 +1,23 @@
 import SiteCard from "./SiteCard";
 import Filter from "../Filters/Filter";
 import { useSitesList } from "@/hooks/swr/listSites";
-import { useState } from "react";
-import { Item, SiteCardType } from "@/constants/types";
+import { SiteCardType } from "@/constants/types";
+import { SiteItems } from "@/constants/values";
+import { useSitesContext } from "@/hooks/contexts/sitesContext";
 
-const Items =  [
-    {
-        label: 'The Good',
-        value: 'good'
-    },
-    {
-        label: 'The Bad',
-        value: 'bad'
-    },
-    {
-        label: 'The Ugly',
-        value: 'ugly'
-    }
-]
+
 
 export default function ListSites(){
-
-    const { sites, loading } = useSitesList()
-    const [ item, setItem ] = useState<Item>(Items[0])
+    const { filter, setFilter } = useSitesContext()
+    const { sites, loading } = useSitesList(filter.value)
     return(
         <>
             <div className="space-y-3">
 
-                <Filter items={Items} item={item} setItem={setItem}/>
+                <Filter items={SiteItems} item={filter} setItem={setFilter}/>
 
                 {!loading && (<div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
-                    {sites.map((site: SiteCardType) => (
+                    {sites?.map((site: SiteCardType) => (
                         <SiteCard site={site} key={site.id} />
                     ))}
                 </div>)}

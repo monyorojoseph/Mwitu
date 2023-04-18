@@ -28,7 +28,7 @@ class ListReviewSerializer(serializers.ModelSerializer):
 class PostReviewSerializer(serializers.Serializer):
     comment = serializers.CharField()
     rating = serializers.IntegerField()
+    site_id = serializers.CharField()
 
     def create(self, validated_data):
-        print(validated_data)
         return Review.objects.create(**validated_data)

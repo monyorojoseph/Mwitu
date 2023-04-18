@@ -28,7 +28,7 @@ export default function Add(){
             <>
                 <section className="space-y-3 mt-5 mb-10">
                     {/* form */}
-                    <form className="space-y-3" onSubmit={onSubmitHandler} id="form">
+                    <form className="space-y-3" onSubmit={onSubmitHandler} id="form" encType="multipart/form-data">
                         <div className="grid grid-cols-6 gap-3">
 
                         <div className="col-span-6">

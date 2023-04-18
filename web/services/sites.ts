@@ -9,3 +9,12 @@ export async function createSite(formData:any) {
         console.log(e)
     } 
 }
+
+export async function postReview(formData:any) {
+    try{
+        const response = await axiosInstance.post('/mwitu/post-review/', formData);
+        return response
+    }catch(e){
+        console.log(e)
+    } 
+}

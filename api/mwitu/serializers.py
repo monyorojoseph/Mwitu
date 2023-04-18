@@ -26,9 +26,9 @@ class ListReviewSerializer(serializers.ModelSerializer):
         fields = ['id', 'full_name', 'comment', 'timestamp', 'rating', 'upvotes_count', 'downvotes_count']
 
 class PostReviewSerializer(serializers.Serializer):
-    user_id = serializers.CharField()
     comment = serializers.CharField()
     rating = serializers.IntegerField()
 
     def create(self, validated_data):
+        print(validated_data)
         return Review.objects.create(**validated_data)

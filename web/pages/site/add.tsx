@@ -17,7 +17,7 @@ export default function Add(){
         const formData = new FormData(form)
         const resp = await createSite(formData) as AxiosResponse;
         setLoading(false)
-        if(resp?.status === 200){
+        if(resp?.status === 201){
             console.log(resp.data)
             router.push('/')
         }

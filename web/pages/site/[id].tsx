@@ -11,6 +11,8 @@ import Filter from "@/components/Filters/Filter";
 import { Item, Review } from "@/constants/types";
 import { useListReviews } from "@/hooks/swr/listReviews";
 import { monthDate } from "@/utils/yearData";
+import { postReview } from "@/services/sites";
+import { AxiosResponse } from "axios";
 // import BreadCrumb from "@/components/Breadcrumb/Breadcrumb";
 
 export default function Site(){
@@ -185,9 +187,22 @@ function Reviews(){
 function LeaveReview(){
     const [ stars, setStars ] = useState<number>(0)
     const [ review, setReview ] = useState<string>('')
+    const [ loading, setLoading ] = useState<boolean>(false)
 
     const router = useRouter()
     const { id } = router.query;
+
+    const handlePost = async (e:React.SyntheticEvent)=> {
+        e.preventDefault()
+        setLoading(true)
+        const resp = await postReview({ comment: review, rating: stars}) as AxiosResponse;
+        setLoading(false)
+    if ( resp?.status === 201){
+        // react toastify
+        console.log(resp)
+    }
+
+    }
 
     return(
         <>
@@ -210,7 +225,8 @@ function LeaveReview(){
               </div>
 
               <div>
-                <button className="py-1 px-4 text-GhostWhite font-semibold bg-PrimstonGreen rounded-md">
+                <button className="py-1 px-4 text-GhostWhite font-semibold bg-PrimstonGreen disabled:bg-Jet disabled:bg-opacity-30 rounded-md"
+                onClick={handlePost} disabled={review ===  '' && stars === 0}>
                     Post
                 </button>
               </div>

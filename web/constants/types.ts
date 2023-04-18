@@ -2,7 +2,8 @@ export interface SiteCardType {
     id: string;
     name: string;
     cover_image: string;
-    // rating: number;
+    total_reviews: number;
+    avg_rating: number;
 }
 
 export interface SiteDetailsType {    
@@ -10,11 +11,22 @@ export interface SiteDetailsType {
     cover_image: string;
     about: string;
     url: string;
-    // email: string;
-
+    total_reviews: number;
+    avg_rating: number;
 }
+
 
 export interface Item {
     label: string;
     value: string;
+}
+
+export interface Review {
+    id: number
+    full_name: string
+    comment: string
+    timestamp: Date
+    rating: number
+    upvotes_count: number
+    downvotes_count: number
 }

@@ -8,14 +8,19 @@ import { HiOutlineMail } from 'react-icons/hi'
 import { useRouter } from "next/router";
 import { useSitesDetails } from "@/hooks/swr/siteDetails";
 import Filter from "@/components/Filters/Filter";
-import { Item } from "@/constants/types";
+import { Item, Review } from "@/constants/types";
+import { useListReviews } from "@/hooks/swr/listReviews";
+import { monthDate } from "@/utils/yearData";
 // import BreadCrumb from "@/components/Breadcrumb/Breadcrumb";
 
 export default function Site(){
+    const router = useRouter()
+    const { id } = router.query;
+
     return(
         <Layout>
             <>
-                <section className="my-5">
+                {id && (<section className="my-5">
                     {/* <div className="my-4">
                         <BreadCrumb />
                     </div> */}
@@ -26,35 +31,30 @@ export default function Site(){
                         {/* rating values and site details */}
                         <div className="col-span-4">
                             <SiteDetails />
-                            <RatingValues />
+                            <AverageRatingValues />
                             <Sponser />
                         </div>
                     </div>  
                     {/* Related */}
                     <div></div>
-                </section>
+                </section>)}
             </>
         </Layout>
     )
 }
 
-function RatingValues(){
-    const barList = [5, 4, 3, 2, 1]
-    const bars = barList.map((value)=> (
-        <div className="flex flex-row justify-start items-center">
-            <div className="border rounded-md py-1 px-3 w-fit">
-                <RatedBar stars={value} extraStyles="text-3xl mx-2"/>
-            </div>
-            <div className="ml-5 text-lg font-semibold">
-                5
-            </div>
-        </div>
-    ))
+function AverageRatingValues(){
+    const router = useRouter()
+    const { id } = router.query;
+    const { site, loading } = useSitesDetails(id as string)
 
     return(<>
-        <div className="border rounded-md shadow-sm p-2 space-y-2">
-            {bars}
-        </div>
+        {!loading && (<div className="border rounded-md shadow-sm p-2 space-y-2">
+            <h4 className="text-lg font-semibold mx-2 mb-3">Average Rating</h4>
+            <RatedBar stars={site.avg_rating} extraStyles="text-3xl mx-2 mb-3"/>
+
+        </div>)}
+        { loading && ( <h4>Loading...</h4> )}
         </>)
 }
 
@@ -70,7 +70,11 @@ function SiteDetails(){
         </div>
         <div className="py-1 px-3">{site.about}</div>
         <div className="py-1 px-3">
-            <TbWorldWww className="text-2xl font-semibold"/>
+            <a href={site.url} target="_blank" rel="noopener noreferrer"
+            className="flex flex-row justify-start items-center space-x-5 hover:text-ProcessCyan">
+                <TbWorldWww className="text-2xl font-semibold"/>
+                <span>{site.name}</span>
+            </a>
         </div>
         {/* <div className="py-1 px-3">
             <HiOutlineMail className="text-2xl font-semibold"/>
@@ -132,41 +136,47 @@ function Reviews(){
     const router = useRouter()
     const { id } = router.query;
     const [ item, setItem ] = useState<Item>(Items[0])
+    const { reviews, loading } = useListReviews(id as string)
 
 
     return(
         <>
             <div className="space-y-3">
                 <Filter item={item} setItem={setItem} items={Items}/>
-                <div className="rounded-md border border-gray-300 w-10/12 p-3 space-y-3 shadow-sm">
-                    {/* name and time */}
-                    <div className="flex flex-row justify-between items-center">
-                        <h2 className="font-semibold text-lg">John Doe</h2>
-                        <h2>Sat 04:44 P.M</h2>
-                    </div>
-                    {/* rating bar */}
-                    <div>
-                        <RatedBar stars={3}/>
-                    </div>
-                    {/* review text */}
-                    <div>
-                        <p>
-                        Specifically, if you mouse over a component very quickly, only the onMouseEnter event is registered. 
-                        The onMouseLeave never fires, and thus can't update state... leaving the component to appear as if it still is being hovered over.
-                        </p>
-                    </div>
-                    {/* action */}
-                    <div className="flex flex-row justify-start items-center space-x-2">
-                        <span>
-                            <BiUpvote 
-                            className="text-2xl cursor-pointer text-PrimstonGreen"/>
-                        </span>
-                        <span>
-                            <BiDownvote 
-                            className="text-2xl cursor-pointer text-Tomato"/>
-                        </span>
-                    </div>
-                </div>
+                {!loading && (
+
+                    <>
+                        { reviews.map((review: Review)=> (
+                            <div key={review.id} className="rounded-md border border-gray-300 w-10/12 p-3 space-y-3 shadow-sm">
+                                {/* name and time */}
+                                <div className="flex flex-row justify-between items-center">
+                                    <h2 className="font-semibold text-lg">{review.full_name}</h2>
+                                    <h2>{monthDate(review.timestamp)}</h2>
+                                </div>
+                                {/* rating bar */}
+                                <div>
+                                    <RatedBar stars={review.rating}/>
+                                </div>
+                                {/* review text */}
+                                <div>
+                                    <p>{review.comment}</p>
+                                </div>
+                                {/* action */}
+                                <div className="flex flex-row justify-start items-center space-x-2">
+                                    <span>
+                                        <BiUpvote 
+                                        className="text-2xl cursor-pointer text-PrimstonGreen"/>
+                                    </span>
+                                    <span>
+                                        <BiDownvote 
+                                        className="text-2xl cursor-pointer text-Tomato"/>
+                                    </span>
+                                </div>
+                            </div>
+                        ))}
+                    </>
+                ) }
+                {loading && <h4>Loading...</h4> }
             </div>
         </>
     )

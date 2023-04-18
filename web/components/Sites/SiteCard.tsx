@@ -23,8 +23,8 @@ export default function SiteCard({site}:{site: SiteCardType}){
                         </p>
                     </Link>
                     <div className="flex flex-row justify-between items-center">
-                        <RatedBar stars={4} extraStyles="text-lg"/>
-                        <h6 className="text-sm text-gray-500">100 reviews</h6>
+                        <RatedBar stars={site.avg_rating} extraStyles="text-lg"/>
+                        <h6 className="text-sm text-gray-500">{site.total_reviews} reviews</h6>
 
                     </div>
                 </div>

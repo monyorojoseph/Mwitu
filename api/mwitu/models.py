@@ -23,7 +23,7 @@ class Site(models.Model):
     updated = models.DateTimeField(auto_now=True)
     about = models.TextField()
 
-    objectss = models.Manager()    
+    objects = models.Manager()    
     mwitu = SiteManager()
 
     def __str__(self) -> str:

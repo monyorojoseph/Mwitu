@@ -42,12 +42,14 @@ function Profile(){
                 <div className="space-y-4">
                     <div className="font-semibold text-Jet flex justify-start items-center space-x-3">
                         <span className="text-lg">Full name:</span>
-                        <input type="text" className="text-opacity-70 bg-GhostWhite text-Night border rounded-md py-1 px-3"
+                        <input type="text" className="text-opacity-70 bg-GhostWhite text-Night border rounded-md py-1 px-3
+                        focus:ring-2 ring-PrincetonOrange outline-0 focus:outline-0"
                         value={profile?.full_name} onChange={(e)=> {}} />
                     </div>
                     <div className="font-semibold text-Jet flex justify-start items-center space-x-3">
                         <span className="text-lg">Email:</span>
-                        <input type="text" className="text-opacity-70 bg-GhostWhite text-Night border rounded-md py-1 px-3"
+                        <input type="text" className="text-opacity-70 bg-GhostWhite text-Night border rounded-md py-1 px-3
+                        focus:ring-2 ring-PrincetonOrange outline-0 focus:outline-0"
                         value={profile?.email} onChange={(e)=> {}} />
                     </div>
                     <div className="font-semibold text-Jet flex justify-start items-center space-x-3">

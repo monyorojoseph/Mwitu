@@ -26,3 +26,12 @@ export async function voteReview(formData:any) {
         console.log(e)
     } 
 }
+
+export async function searchSite(formData:any) {
+    try{
+        const response = await axiosInstance.post('/mwitu/search-site/', formData);
+        return response
+    }catch(e){
+        console.log(e)
+    } 
+}

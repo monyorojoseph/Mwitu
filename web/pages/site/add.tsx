@@ -4,6 +4,7 @@ import { AxiosResponse } from "axios";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { BsCardImage } from 'react-icons/bs'
+import { toast } from "react-toastify";
 
 export default function Add(){
     const router = useRouter()
@@ -18,7 +19,7 @@ export default function Add(){
         const resp = await createSite(formData) as AxiosResponse;
         setLoading(false)
         if(resp?.status === 201){
-            console.log(resp.data)
+            toast.success('Site added')
             router.push('/')
         }
     }
@@ -68,9 +69,8 @@ export default function Add(){
                                     name="name"
                                     autoComplete="website-name"
                                     required
-                                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 bg-GhostWhite
-                                    ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset 
-                                    focus:ring-Jet sm:text-sm sm:leading-6"
+                                    className="block w-full px-3 rounded-md border-0 py-1.5 text-gray-900 shadow-sm bg-GhostWhite
+                                  placeholder:text-gray-400 sm:text-sm sm:leading-6 focus:ring-2 ring-PrincetonOrange outline-0 focus:outline-0"
                                     />
                                 </div>
                             </div>
@@ -85,9 +85,9 @@ export default function Add(){
                                     name="url"
                                     autoComplete="website-url"
                                     required
-                                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 bg-GhostWhite
-                                    ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset
-                                    focus:ring-Jet sm:text-sm sm:leading-6"
+                                    className="block w-full px-3 rounded-md border-0 py-1.5 text-gray-900 shadow-sm  bg-GhostWhite
+                                     placeholder:text-gray-400 sm:text-sm sm:leading-6 focus:ring-2 ring-PrincetonOrange 
+                                     outline-0 focus:outline-0"
                                     />
                                 </div>
                             </div>
@@ -102,8 +102,8 @@ export default function Add(){
                                 <textarea
                                 name="about"
                                 rows={3}
-                                className="block w-full rounded-md border-0 text-Night shadow-sm ring-1 ring-inset p-2 bg-GhostWhite
-                                ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-Night"
+                                className="block w-full rounded-md border-0 text-Night shadow-sm p-2 bg-GhostWhite
+                                placeholder:text-gray-400 focus:ring-2 ring-PrincetonOrange outline-0 focus:outline-0"
                                 required
                                 placeholder="Write something ..."
                                 />

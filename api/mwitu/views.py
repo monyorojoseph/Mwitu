@@ -13,6 +13,13 @@ from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
+class SearchSiteAPI(APIView):
+    def post(self, request, format=None):
+        q=request.data['q']
+        queryset = Site.objects.filter(name__icontains=q)
+        serializer = ListSiteSerializer(queryset, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
 # create site
 class CreateSiteAPI(APIView):
     permission_classes =  [ IsAuthenticated ]

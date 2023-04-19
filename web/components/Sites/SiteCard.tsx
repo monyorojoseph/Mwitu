@@ -7,7 +7,7 @@ export default function SiteCard({site}:{site: SiteCardType}){
 
     return(
         <>
-            <div key={site.id} className="group border rounded-md p-2 shadow-sm">
+            <div key={site.id} className="group border rounded-md p-2 shadow-sm items-end">
                 <div className="h-28 aspect-w-1 overflow-hidden rounded-lg bg-gray-200 xl:aspect-h-8 xl:aspect-w-7">
                     <img
                     src={getImageUrl(site.cover_image)}
@@ -16,9 +16,9 @@ export default function SiteCard({site}:{site: SiteCardType}){
                     />
                 </div>
 
-                <div className="mt-2">
+                <div className="mt-2 space-y-2">
                     <Link href={`/site/${site.id}`}>                    
-                        <p className="mt-1 text-lg text-Night hover:text-PrincetonOrange">
+                        <p className="mt-1 text-Night hover:text-PrincetonOrange">
                             {site.name}
                         </p>
                     </Link>

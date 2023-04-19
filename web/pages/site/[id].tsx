@@ -16,7 +16,7 @@ import { AxiosResponse } from "axios";
 import { ReviewsContextProvider, useReviewsContext } from "@/hooks/contexts/reviewsContext";
 import { ReviewItems, ReviewTabs } from "@/constants/values";
 import Loader from "@/components/Loading/Loader";
-import Begger from "@/components/Begger/Beggre";
+import Begger from "@/components/Begger/Begger";
 import { toast } from "react-toastify";
 import getImageUrl from "@/utils/imageUrl";
 

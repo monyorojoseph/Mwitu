@@ -63,6 +63,7 @@ class Review(models.Model):
 
     class Meta:
         unique_together = [ 'user', 'site' ]
+        ordering = ['-timestamp']
     
     def full_name(self):
         return self.user.profile.full_name

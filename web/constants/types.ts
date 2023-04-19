@@ -30,3 +30,10 @@ export interface Review {
     upvotes: number
     downvotes: number
 }
+
+export interface ProfileType {
+    full_name: string
+    email: string
+    image: string | null
+    join_date: Date
+}

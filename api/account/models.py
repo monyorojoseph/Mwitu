@@ -88,4 +88,7 @@ class Profile(models.Model):
     def __str__(self) -> str:
         return self.full_name if self.full_name else self.email
 
+    def join_date(self):
+        return self.user.date_joined
+
 # version 2.0 add Organization

@@ -36,4 +36,4 @@ class GoogleOAuthSerializer(serializers.Serializer):
 class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
-        fields = ['emai', 'full_name', 'image']
+        fields = ['email', 'full_name', 'image', 'join_date']

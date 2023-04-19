@@ -1,21 +1,21 @@
 import Layout from "@/components/Layout/Layout";
 import RatedBar from "@/components/Ratings/RatedBar";
 import RatingBar from "@/components/Ratings/RatingBar";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { BiUpvote, BiDownvote,  } from 'react-icons/bi';
 import { TbWorldWww } from 'react-icons/tb';
 import { HiOutlineMail } from 'react-icons/hi'
 import { useRouter } from "next/router";
 import { useSitesDetails } from "@/hooks/swr/siteDetails";
 import Filter from "@/components/Filters/Filter";
-import { Item, Review } from "@/constants/types";
+import { Review } from "@/constants/types";
 import { useListReviews } from "@/hooks/swr/listReviews";
-import { monthDate } from "@/utils/yearData";
+import { monthDate } from "@/utils/date";
 import { postReview, voteReview } from "@/services/sites";
 import { AxiosResponse } from "axios";
 import { ReviewsContextProvider, useReviewsContext } from "@/hooks/contexts/reviewsContext";
 import { ReviewItems, ReviewTabs } from "@/constants/values";
-// import BreadCrumb from "@/components/Breadcrumb/Breadcrumb";
+import Loader from "@/components/Loading/Loader";
 
 export default function Site(){
     const router = useRouter()
@@ -55,10 +55,10 @@ function AverageRatingValues(){
     return(<>
         {!loading && (<div className="border rounded-md shadow-sm p-2 space-y-2">
             <h4 className="text-lg font-semibold mx-2 mb-3">Average Rating</h4>
-            <RatedBar stars={site.avg_rating} extraStyles="text-3xl mx-2 mb-3"/>
+            <RatedBar stars={site?.avg_rating} extraStyles="text-3xl mx-2 mb-3"/>
 
         </div>)}
-        { loading && ( <h4>Loading...</h4> )}
+        { loading && <Loader /> }
         </>)
 }
 
@@ -70,21 +70,21 @@ function SiteDetails(){
     return(<>
     {!loading && (<div className="border rounded-md mb-3 divide-y">
         <div className="py-1 px-3 text-lg font-semibold">
-            {site.name}
+            {site?.name}
         </div>
-        <div className="py-1 px-3">{site.about}</div>
+        <div className="py-1 px-3">{site?.about}</div>
         <div className="py-1 px-3">
-            <a href={site.url} target="_blank" rel="noopener noreferrer"
+            <a href={site?.url} target="_blank" rel="noopener noreferrer"
             className="flex flex-row justify-start items-center space-x-5 hover:text-ProcessCyan">
                 <TbWorldWww className="text-2xl font-semibold"/>
-                <span>{site.name}</span>
+                <span>{site?.name}</span>
             </a>
         </div>
         {/* <div className="py-1 px-3">
             <HiOutlineMail className="text-2xl font-semibold"/>
         </div> */}
     </div>)}
-    {loading && ( <h2>Loading</h2> )}</>)
+    {loading && <Loader />}</>)
 }
 
 function Sponser(){
@@ -162,12 +162,12 @@ function Reviews(){
                                     <span className=" flex flex-row items-center space-x-2">
                                         <BiUpvote onClick={()=> handleVoteReview(review.id.toString(), 'up' )}
                                         className="text-2xl cursor-pointer text-PrimstonGreen"/>
-                                        <p className="text-sm font-semibold text-Night">{review.upvotes}</p>
+                                        <p className="text-xs font-semibold text-Night">{review.upvotes}</p>
                                     </span>
                                     <span className=" flex flex-row items-center space-x-2">
                                         <BiDownvote onClick={()=> handleVoteReview(review.id.toString(), 'down' )}
                                         className="text-2xl cursor-pointer text-Tomato"/>
-                                        <p className="text-sm font-semibold text-Night">{review.downvotes}</p>
+                                        <p className="text-xs font-semibold text-Night">{review.downvotes}</p>
 
                                     </span>
                                 </div>
@@ -175,7 +175,7 @@ function Reviews(){
                         ))}
                     </>
                 ) }
-                {loading && <h4>Loading...</h4> }
+                {loading && <Loader /> }
             </div>
         </>
     )
@@ -203,31 +203,31 @@ function LeaveReview({setTab}:{setTab: Function}){
 
     return(
         <>
-        <div className="space-y-3">
-              <div>
-                <textarea
-                  name="review"
-                  rows={3}
-                  onChange={(e)=> setReview(e.target.value)}
-                  className="block w-full rounded-md border-0 text-Night shadow-sm ring-1 ring-inset p-2 bg-GhostWhite
-                  ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-Night"
-                  defaultValue={review}
-                />
+            <div className="space-y-3">
+                <div>
+                    <textarea
+                    name="review"
+                    rows={3}
+                    onChange={(e)=> setReview(e.target.value)}
+                    className="block w-full rounded-md border-0 text-Night shadow-sm ring-1 ring-inset p-2 bg-GhostWhite
+                    ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-Night"
+                    defaultValue={review}
+                    />
 
-                <p className="mt-3 text-sm leading-6 text-gray-600">Write a few sentences on what you like or hate about this site.</p>
-              </div>
+                    <p className="mt-3 text-sm leading-6 text-gray-600">Write a few sentences on what you like or hate about this site.</p>
+                </div>
 
-              <div>
-                <RatingBar stars={stars} setStars={setStars}/>
-              </div>
+                <div>
+                    <RatingBar stars={stars} setStars={setStars}/>
+                </div>
 
-              <div>
-                <button className="py-1 px-4 text-GhostWhite font-semibold bg-PrimstonGreen disabled:bg-Jet disabled:bg-opacity-30 rounded-md"
-                onClick={handlePost} disabled={review ===  '' && stars === 0}>
-                    {loading ? 'Posting...' : 'Post'}
-                </button>
-              </div>
-        </div>
+                <div>
+                    <button className="py-1 px-4 text-GhostWhite font-semibold bg-PrimstonGreen disabled:bg-Jet disabled:bg-opacity-30 rounded-md"
+                    onClick={handlePost} disabled={review ===  '' && stars === 0}>
+                        {loading ? 'Posting...' : 'Post'}
+                    </button>
+                </div>
+            </div>
         </>
     )
 }

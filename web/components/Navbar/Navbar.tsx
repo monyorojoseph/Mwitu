@@ -19,16 +19,13 @@ export default function Navbar(){
                         </div>
                     </Link>
                 </div>
-                {/* search bar */}
-                <div className="col-span-8 flex flex-row justify-evenly items-center">
+                <div className="col-span-8 flex flex-row justify-end items-center">
                     <Link href={'/site/add'}>                    
                         <span>
                             <AiOutlineAppstoreAdd 
                             className='text-3xl cursor-pointer font-bold hover:text-PrincetonOrange'/>
                         </span>
                     </Link>
-                    <input type="search" name="site" 
-                    className="w-7/12 h-9 rounded-lg outline-0 text-Night font-semibold px-3 placeholder:text-opacity-50" placeholder='search  ...'/>
                 </div>
                 {/* login/signup */}
                 <div className="col-span-2">

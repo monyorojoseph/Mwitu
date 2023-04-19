@@ -1,3 +1,3 @@
 ## Sites Mwitu
 
-We slam site and products for fun.
+We slam sites and products for fun.

@@ -11,3 +11,9 @@ export function monthDate(date: Date){
     
     return result
 }
+
+export function joinDate(date: Date){
+    const join_date = new Date(date)
+    
+    return join_date.toLocaleString('en-US', { weekday: "long", month: "long", year: "numeric"})
+}

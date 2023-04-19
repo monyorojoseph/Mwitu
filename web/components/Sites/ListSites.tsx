@@ -4,6 +4,7 @@ import { useSitesList } from "@/hooks/swr/listSites";
 import { SiteCardType } from "@/constants/types";
 import { SiteItems } from "@/constants/values";
 import { useSitesContext } from "@/hooks/contexts/sitesContext";
+import Loader from "../Loading/Loader";
 
 
 
@@ -21,7 +22,8 @@ export default function ListSites(){
                         <SiteCard site={site} key={site.id} />
                     ))}
                 </div>)}
-                {loading && ( <h2>Laoding...</h2> )}
+                {loading && <Loader />}
+
             </div>
         </>
     )

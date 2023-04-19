@@ -27,6 +27,6 @@ export interface Review {
     comment: string
     timestamp: Date
     rating: number
-    upvotes_count: number
-    downvotes_count: number
+    upvotes: number
+    downvotes: number
 }

@@ -17,3 +17,12 @@ export async function postReview(formData:any) {
         console.log(e)
     } 
 }
+
+export async function voteReview(formData:any) {
+    try{
+        const response = await axiosInstance.post('/mwitu/vote-review/', formData);
+        return response
+    }catch(e){
+        console.log(e)
+    } 
+}

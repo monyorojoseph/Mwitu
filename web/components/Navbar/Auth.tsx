@@ -2,6 +2,7 @@ import { googleSignIn } from "@/services/auth"
 import axiosInstance from "@/utils/axios"
 import { AxiosResponse } from "axios"
 import { useSession, signIn, signOut } from "next-auth/react"
+import Link from "next/link"
 import { useEffect } from "react"
 import { AiOutlineLogout, AiOutlineUser } from 'react-icons/ai'
 
@@ -34,8 +35,10 @@ export default function Auth(){
         return(
             <>
             <div className="flex flex-row justify-center items-center space-x-5">
-                <AiOutlineUser className="border-2 border-GhostWhite text-3xl font-bold rounded-full cursor-pointer
-                hover:border-PrincetonOrange hover:text-PrincetonOrange"/>
+                <Link href={'profile'}>
+                    <AiOutlineUser className="border-2 border-GhostWhite text-3xl font-bold rounded-full cursor-pointer
+                    hover:border-PrincetonOrange hover:text-PrincetonOrange"/>
+                </Link>
                 <AiOutlineLogout onClick={()=> signOut()}
                 className="text-3xl cursor-pointer hover:text-Tomato font-bold"/>
             </div>

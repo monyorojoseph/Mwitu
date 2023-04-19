@@ -5,18 +5,19 @@ export const ReviewItems =  [
         value: 'latest'
     },
     {
-        label: 'Most voted',
-        value: 'mostvoted'
+        label: 'Most Rated',
+        value: 'mostrated'
     },
     {
-        label: 'Best',
-        value: 'best'
+        label: 'Most Upvotes',
+        value: 'mostupvotes'
     },
     {
-        label: 'Bad',
-        value: 'bad'
-    }
+        label: 'Most Downvotes',
+        value: 'mostdowmvotes'
+    },
 ]
+
 
 export const SiteItems =  [
     {

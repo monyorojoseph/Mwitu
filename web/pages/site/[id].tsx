@@ -11,7 +11,7 @@ import Filter from "@/components/Filters/Filter";
 import { Item, Review } from "@/constants/types";
 import { useListReviews } from "@/hooks/swr/listReviews";
 import { monthDate } from "@/utils/yearData";
-import { postReview } from "@/services/sites";
+import { postReview, voteReview } from "@/services/sites";
 import { AxiosResponse } from "axios";
 import { ReviewsContextProvider, useReviewsContext } from "@/hooks/contexts/reviewsContext";
 import { ReviewItems, ReviewTabs } from "@/constants/values";
@@ -127,6 +127,13 @@ function Reviews(){
     const { filter, setFilter } = useReviewsContext()
     const { reviews, loading } = useListReviews(id as string, filter.value)
 
+    const handleVoteReview = async(review_id: string, vote_type: string)=> {
+        const response = await voteReview({review_id, vote_type}) as AxiosResponse;
+        if (response.status == 200){
+            // toastify
+        }
+    }
+
 
     return(
         <>
@@ -135,7 +142,7 @@ function Reviews(){
                 {!loading && (
 
                     <>
-                        { reviews.map((review: Review)=> (
+                        { reviews?.map((review: Review)=> (
                             <div key={review.id} className="rounded-md border border-gray-300 w-10/12 p-3 space-y-3 shadow-sm">
                                 {/* name and time */}
                                 <div className="flex flex-row justify-between items-center">
@@ -152,13 +159,16 @@ function Reviews(){
                                 </div>
                                 {/* action */}
                                 <div className="flex flex-row justify-start items-center space-x-2">
-                                    <span>
-                                        <BiUpvote 
+                                    <span className=" flex flex-row items-center space-x-2">
+                                        <BiUpvote onClick={()=> handleVoteReview(review.id.toString(), 'up' )}
                                         className="text-2xl cursor-pointer text-PrimstonGreen"/>
+                                        <p className="text-sm font-semibold text-Night">{review.upvotes}</p>
                                     </span>
-                                    <span>
-                                        <BiDownvote 
+                                    <span className=" flex flex-row items-center space-x-2">
+                                        <BiDownvote onClick={()=> handleVoteReview(review.id.toString(), 'down' )}
                                         className="text-2xl cursor-pointer text-Tomato"/>
+                                        <p className="text-sm font-semibold text-Night">{review.downvotes}</p>
+
                                     </span>
                                 </div>
                             </div>

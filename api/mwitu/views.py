@@ -3,11 +3,13 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
-
+from . import SITE_FILTERS
 from .serializers import (CreateSiteSerializer,  ListSiteSerializer, SiteSerializer, ListReviewSerializer,
                          PostReviewSerializer)
 from .models import Site, Review
 from django.contrib.auth import get_user_model
+
+
 
 User = get_user_model()
 
@@ -24,7 +26,8 @@ class CreateSiteAPI(APIView):
 
 class ListSitesAPI(APIView):
     def get(self, request, filter, format=None):
-        queryset = Site.objects.all()
+        filter_value = SITE_FILTERS[filter]['weigth']
+        queryset = Site.mwitu.sites(filter_value)
         serializer = ListSiteSerializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     
@@ -38,7 +41,13 @@ class SiteDetailsAPI(APIView):
 class ListSiteReviewsAPI(APIView):
     def get(self, request, site_id, filter, format=None):
         site = get_object_or_404(Site, id=site_id)
-        reviews = Review.objects.filter(site=site)
+        querysets = {
+            'latest' : Review.mwitu.filter(site=site),
+            'mostupvotes' : Review.mwitu.most_upvotes().filter(site=site),
+            'mostdowmvotes' : Review.mwitu.most_downvotes().filter(site=site),
+            'mostrated' : Review.mwitu.most_rated().filter(site=site)
+        }
+        reviews = querysets[filter]
         serializer = ListReviewSerializer(reviews, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -59,6 +68,6 @@ class VoteReviewAPI(APIView):
         if vote_type == 'up':
             review.upvote.add(request.user)
             return Response(status=status.HTTP_200_OK)
-        else:
+        if vote_type  == 'down':
             review.downvote.add(request.user)
             return Response(status=status.HTTP_200_OK)

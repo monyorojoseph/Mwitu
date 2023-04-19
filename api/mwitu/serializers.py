@@ -23,7 +23,7 @@ class SiteSerializer(serializers.ModelSerializer):
 class ListReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Review
-        fields = ['id', 'full_name', 'comment', 'timestamp', 'rating', 'upvotes_count', 'downvotes_count']
+        fields = ['id', 'full_name', 'comment', 'timestamp', 'rating', 'upvotes', 'downvotes']
 
 class PostReviewSerializer(serializers.Serializer):
     comment = serializers.CharField()

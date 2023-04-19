@@ -28,7 +28,7 @@ export default function Navbar(){
                         </span>
                     </Link>
                     <input type="search" name="site" 
-                    className="w-7/12 h-9 rounded-2xl"/>
+                    className="w-7/12 h-9 rounded-lg outline-0 text-Night font-semibold px-3"/>
                 </div>
                 {/* login/signup */}
                 <div className="col-span-2">

@@ -16,6 +16,7 @@ import { AxiosResponse } from "axios";
 import { ReviewsContextProvider, useReviewsContext } from "@/hooks/contexts/reviewsContext";
 import { ReviewItems, ReviewTabs } from "@/constants/values";
 import Loader from "@/components/Loading/Loader";
+import Begger from "@/components/Begger/Beggre";
 
 export default function Site(){
     const router = useRouter()
@@ -36,7 +37,7 @@ export default function Site(){
                         <div className="col-span-4">
                             <SiteDetails />
                             <AverageRatingValues />
-                            <Sponser />
+                            <Begger />
                         </div>
                     </div>  
                     {/* Related */}
@@ -53,7 +54,7 @@ function AverageRatingValues(){
     const { site, loading } = useSitesDetails(id as string)
 
     return(<>
-        {!loading && (<div className="border rounded-md shadow-sm p-2 space-y-2">
+        {!loading && (<div className="border rounded-md shadow-sm p-2 space-y-2 mb-2">
             <h4 className="text-lg font-semibold mx-2 mb-3">Average Rating</h4>
             <RatedBar stars={site?.avg_rating} extraStyles="text-3xl mx-2 mb-3"/>
 
@@ -85,12 +86,6 @@ function SiteDetails(){
         </div> */}
     </div>)}
     {loading && <Loader />}</>)
-}
-
-function Sponser(){
-    return(
-        <>Begger</>
-    )
 }
 
 function ReviewContainer(){

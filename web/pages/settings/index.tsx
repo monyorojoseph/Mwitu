@@ -1,29 +1,29 @@
 import Layout from "@/components/Layout/Layout";
-import { ProfileTabs } from "@/constants/values";
+import { SettingTabs } from "@/constants/values";
 import { useProfileDetails } from "@/hooks/swr/profileDetails";
 import { joinDate } from "@/utils/date";
 import { useState } from "react";
 
-export default function Profile(){
-    const [ profileTabs,  setProfileTabs ] = useState<string>(ProfileTabs[0])
+export default function Setting(){
+    const [ settingTabs,  setSettingTabs ] = useState<string>(SettingTabs[0])
     return(
         <Layout>
             <section className="grid gap-2 grid-cols-6">
                 <div className="col-span-1">
                     <div className=" border divide-y flex flex-col">
                         <span className="py-2 px-3 cursor-pointer font-semibold text-lg"
-                        onClick={()=> setProfileTabs(ProfileTabs[0])}>
+                        onClick={()=> setSettingTabs(SettingTabs[0])}>
                             Profile
                         </span>
                         <span className="py-2 px-3 cursor-pointer font-semibold text-lg"
-                        onClick={()=> setProfileTabs(ProfileTabs[1])}>
+                        onClick={()=> setSettingTabs(SettingTabs[1])}>
                             Account
                         </span>
                     </div>
                 </div>
                 <div className="border col-span-5 p-8 shadow-sm rounded-md">
-                    { profileTabs == ProfileTabs[0] && <ProfileDetails />}
-                    { profileTabs == ProfileTabs[1] &&  <Account />}
+                    { settingTabs == SettingTabs[0] && <Profile />}
+                    { settingTabs == SettingTabs[1] &&  <Account />}
                 </div>
                 
             </section>
@@ -31,7 +31,7 @@ export default function Profile(){
     )
 }
 
-function ProfileDetails(){
+function Profile(){
     const { profile, loading } = useProfileDetails()
 
     return(

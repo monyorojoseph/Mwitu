@@ -63,11 +63,16 @@ class PostReviewAPI(APIView):
 class VoteReviewAPI(APIView):
     permission_classes =  [ IsAuthenticated ]
     def post(self, request, format=None):
+        user = request.user
         vote_type = request.data['vote_type']
         review = get_object_or_404(Review, id=request.data['review_id'])
         if vote_type == 'up':
-            review.upvote.add(request.user)
+            review.upvote.add(user)
+            if user in review.downvote.all():
+                review.downvote.remove(user)
             return Response(status=status.HTTP_200_OK)
         if vote_type  == 'down':
-            review.downvote.add(request.user)
+            review.downvote.add(user)
+            if user in review.upvote.all():
+                review.upvote.remove(user)
             return Response(status=status.HTTP_200_OK)

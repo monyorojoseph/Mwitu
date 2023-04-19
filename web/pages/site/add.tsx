@@ -113,7 +113,7 @@ export default function Add(){
                         <div>
                             <button type="submit" 
                             className="py-1 px-4 rounded-md bg-PrimstonGreen text-GhostWhite font-semibold">
-                                {loading ? 'Loading' : 'Add' }
+                                {loading ? 'Adding' : 'Add' }
                             </button>
                         </div>
 

@@ -34,7 +34,7 @@ export default function Auth(){
     if(session){
         return(
             <>
-            <div className="flex flex-row justify-center items-center space-x-5">
+            <div className="flex flex-row justify-end items-center space-x-5">
                 <Link href={'/settings'}>
                     <AiOutlineUser className="border-2 border-GhostWhite text-3xl font-bold rounded-full cursor-pointer
                     hover:border-PrincetonOrange hover:text-PrincetonOrange"/>

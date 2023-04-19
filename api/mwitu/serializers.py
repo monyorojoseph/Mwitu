@@ -20,7 +20,7 @@ class SiteSerializer(serializers.ModelSerializer):
         model = Site
         fields = ['name', 'cover_image', 'url', 'about', 'total_reviews', 'avg_rating']
 
-class ListReviewSerializer(serializers.ModelSerializer):
+class ReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Review
         fields = ['id', 'full_name', 'comment', 'timestamp', 'rating', 'upvotes', 'downvotes']

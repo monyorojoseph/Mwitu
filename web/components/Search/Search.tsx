@@ -7,11 +7,14 @@ import { toast } from "react-toastify"
 
 export default function Search(){
     const [ q, setQ ] = useState<string>()
+    const [ loading, setLoading ] = useState<boolean>(false)
     const [ queries, setQueries ] = useState<SiteCardType[]>([])
 
     const handleSearch = async() => {
         if(q){
+            setLoading(true)
             const response = await searchSite({q}) as AxiosResponse;
+            setLoading(false)
             if(response.status == 200 ){
                 setQueries(response.data)
             }
@@ -31,7 +34,7 @@ export default function Search(){
                     placeholder="search for site here ..."/>
                     <button 
                     className="py-1 px-3 bg-PrincetonOrange text-GhostWhite font-semibold rounded-md"
-                    onClick={handleSearch}>Search</button>
+                    onClick={handleSearch}>{loading ? 'Searching' : 'Search'}</button>
                 </div>
 
                 { queries?.length > 0 && (

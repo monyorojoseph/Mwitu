@@ -17,6 +17,8 @@ import { ReviewsContextProvider, useReviewsContext } from "@/hooks/contexts/revi
 import { ReviewItems, ReviewTabs } from "@/constants/values";
 import Loader from "@/components/Loading/Loader";
 import Begger from "@/components/Begger/Beggre";
+import { toast } from "react-toastify";
+import getImageUrl from "@/utils/imageUrl";
 
 export default function Site(){
     const router = useRouter()
@@ -26,15 +28,13 @@ export default function Site(){
         <Layout>
             <>
                 {id && (<section className="my-5">
-                    {/* <div className="my-4">
-                        <BreadCrumb />
-                    </div> */}
                     <div className="grid grid-cols-8 gap-4">                     
                         {/* review container */}
                         <div className="col-span-4">
                             <ReviewContainer /></div> 
                         {/* rating values and site details */}
                         <div className="col-span-4">
+                            <SiteImage />
                             <SiteDetails />
                             <AverageRatingValues />
                             <Begger />
@@ -61,6 +61,26 @@ function AverageRatingValues(){
         </div>)}
         { loading && <Loader /> }
         </>)
+}
+
+function SiteImage(){
+    const router = useRouter()
+    const { id } = router.query;
+    const { site, loading } = useSitesDetails(id as string)
+    return(
+        <>
+        {!loading && (<div className="border mb-2 rounded-md p-3">
+            <div className="h-28 aspect-w-1 overflow-hidden rounded-lg bg-gray-200 xl:aspect-h-8 xl:aspect-w-7">
+                <img
+                src={getImageUrl(site.cover_image)}
+                alt={site.name}
+                className="h-full w-full object-cover object-center"
+                />
+            </div>
+        </div>)}
+        {loading && <Loader />}
+        </>
+    )
 }
 
 function SiteDetails(){
@@ -113,8 +133,6 @@ function ReviewContainer(){
     )
 }
 
-
-
 function Reviews(){
 
     const router = useRouter()
@@ -126,6 +144,8 @@ function Reviews(){
         const response = await voteReview({review_id, vote_type}) as AxiosResponse;
         if (response.status == 200){
             // toastify
+            vote_type == 'up' && toast.success('Up Voted')
+            vote_type == 'down' && toast.success('Down Voted')
         }
     }
 
@@ -142,7 +162,7 @@ function Reviews(){
                                 {/* name and time */}
                                 <div className="flex flex-row justify-between items-center">
                                     <h2 className="font-semibold text-lg">{review.full_name}</h2>
-                                    <h2>{monthDate(review.timestamp)}</h2>
+                                    <h2 className="text-sm">{monthDate(review.timestamp)}</h2>
                                 </div>
                                 {/* rating bar */}
                                 <div>
@@ -192,6 +212,7 @@ function LeaveReview({setTab}:{setTab: Function}){
     if ( resp?.status === 201){
         // react toastify
         setTab(ReviewTabs[0])
+        toast.success('Review posted')
     }
 
     }
@@ -204,8 +225,8 @@ function LeaveReview({setTab}:{setTab: Function}){
                     name="review"
                     rows={3}
                     onChange={(e)=> setReview(e.target.value)}
-                    className="block w-full rounded-md border-0 text-Night shadow-sm ring-1 ring-inset p-2 bg-GhostWhite
-                    ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-Night"
+                    className="block w-full rounded-md border-0 text-Night shadow-sm p-2 bg-GhostWhite
+                    placeholder:text-gray-400  focus:ring-2 ring-PrincetonOrange outline-0 focus:outline-0"
                     defaultValue={review}
                     />
 

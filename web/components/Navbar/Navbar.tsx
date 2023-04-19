@@ -10,16 +10,16 @@ export default function Navbar(){
             <div className="mx-auto w-10/12
             grid grid-cols-12 gap-2 items-center py-1">
                 {/* logo */}
-                <div className="col-span-2">
+                <div className="col-span-5">
                     <Link href={'/'}>
-                        <div className='flex flex-row justify-center items-center space-x-2'>
+                        <div className='flex flex-row justify-start items-center space-x-2'>
                             <AiFillStar className='text-3xl fill-PrincetonOrange'/>
                             <h1 className='text-lg font-semibold hover:text-PrincetonOrange flex-wrap'>Sites Mwitu</h1>
 
                         </div>
                     </Link>
                 </div>
-                <div className="col-span-8 flex flex-row justify-end items-center">
+                <div className="col-span-5 flex flex-row justify-end items-center">
                     <Link href={'/site/add'}>                    
                         <span>
                             <AiOutlineAppstoreAdd 

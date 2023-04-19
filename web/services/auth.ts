@@ -1,4 +1,5 @@
 import axiosInstance from "@/utils/axios"
+import errorHandler from "@/utils/errors"
 
 
 export async function googleSignIn(auth_token: string){
@@ -6,6 +7,6 @@ export async function googleSignIn(auth_token: string){
         const response = await axiosInstance.post('/account/google/', { auth_token })
         return response      
     }catch(e){
-        console.log(e)
+        errorHandler(e)
     }
 }

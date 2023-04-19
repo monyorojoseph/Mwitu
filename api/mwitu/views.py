@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from . import SITE_FILTERS
-from .serializers import (CreateSiteSerializer,  ListSiteSerializer, SiteSerializer, ListReviewSerializer,
+from .serializers import (CreateSiteSerializer,  ListSiteSerializer, SiteSerializer, ReviewSerializer,
                          PostReviewSerializer)
 from .models import Site, Review
 from django.contrib.auth import get_user_model
@@ -55,7 +55,7 @@ class ListSiteReviewsAPI(APIView):
             'mostrated' : Review.mwitu.most_rated().filter(site=site)
         }
         reviews = querysets[filter]
-        serializer = ListReviewSerializer(reviews, many=True)
+        serializer = ReviewSerializer(reviews, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 class PostReviewAPI(APIView):
@@ -77,9 +77,9 @@ class VoteReviewAPI(APIView):
             review.upvote.add(user)
             if user in review.downvote.all():
                 review.downvote.remove(user)
-            return Response(status=status.HTTP_200_OK)
+            return Response(ReviewSerializer(review).data ,status=status.HTTP_200_OK)
         if vote_type  == 'down':
             review.downvote.add(user)
             if user in review.upvote.all():
                 review.upvote.remove(user)
-            return Response(status=status.HTTP_200_OK)
+            return Response(ReviewSerializer(review).data, status=status.HTTP_200_OK)

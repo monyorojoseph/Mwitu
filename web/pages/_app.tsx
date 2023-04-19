@@ -1,5 +1,6 @@
 import '@/styles/globals.css'
 import 'react-toastify/dist/ReactToastify.css';
+import 'react-mpesa-stk/dist/index.css'
 import type { AppProps } from 'next/app'
 import { SessionProvider } from "next-auth/react"
 import { ToastContainer } from 'react-toastify'

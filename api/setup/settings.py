@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     # packages
     'rest_framework',
     "corsheaders",
+    'rest_framework_simplejwt.token_blacklist',
     # apps
     'account',
     'mwitu'
@@ -55,7 +56,7 @@ REST_FRAMEWORK = {
 
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(days=5),
-    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=5),
 
     "AUTH_HEADER_TYPES": ("Bearer",),
 }

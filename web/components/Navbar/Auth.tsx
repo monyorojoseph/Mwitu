@@ -1,4 +1,4 @@
-import { googleSignIn } from "@/services/auth"
+import { googleSignIn, logout } from "@/services/auth"
 import axiosInstance from "@/utils/axios"
 import { AxiosResponse } from "axios"
 import { useSession, signIn, signOut } from "next-auth/react"
@@ -31,6 +31,14 @@ export default function Auth(){
         }
     }, [session])
 
+    const handleSignOut = async()=> {
+        //@ts-ignore
+        const response = await logout({refresh: session.refresh})
+        if (response?.status === 200){
+            signOut()            
+        }
+    }
+
     if(session){
         return(
             <>
@@ -39,7 +47,7 @@ export default function Auth(){
                     <AiOutlineUser className="border-2 border-GhostWhite text-3xl font-bold rounded-full cursor-pointer
                     hover:border-PrincetonOrange hover:text-PrincetonOrange"/>
                 </Link>
-                <AiOutlineLogout onClick={()=> signOut()}
+                <AiOutlineLogout onClick={handleSignOut}
                 className="text-3xl cursor-pointer hover:text-Tomato font-bold"/>
             </div>
             </>

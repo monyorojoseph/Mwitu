@@ -10,3 +10,12 @@ export async function googleSignIn(auth_token: string){
         errorHandler(e)
     }
 }
+
+export async function logout(data: any){
+    try{
+        const response = await axiosInstance.post('/account/logout/', data)
+        return response      
+    }catch(e){
+        errorHandler(e)
+    }
+}

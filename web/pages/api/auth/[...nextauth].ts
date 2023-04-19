@@ -36,6 +36,8 @@ export default NextAuth({
         if(token?.data){
           // @ts-ignore
           session.access = token.data.tokens.access
+          // @ts-ignore
+          session.refresh = token.data.tokens.refresh          
         }
         return session
       }

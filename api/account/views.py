@@ -2,7 +2,7 @@ from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
-
+from rest_framework_simplejwt.tokens import RefreshToken
 from .serializers import GoogleOAuthSerializer, ProfileSerializer
 
 # social google auth
@@ -15,6 +15,18 @@ class GoogleOAuthAPI(APIView):
         serializer.is_valid(raise_exception=True)
         data = ((serializer.validated_data)['auth_token'])
         return Response(data, status=status.HTTP_200_OK)
+
+class LogoutAPI(APIView):
+    permission_classes = [ IsAuthenticated ]
+    def post(self, request, format=None):
+        try:
+            refresh = request.data['refresh']
+            token = RefreshToken(refresh)
+            token.blacklist()
+            return Response(status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
 
 # add email auth later
 

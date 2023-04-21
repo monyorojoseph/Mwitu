@@ -8,6 +8,7 @@ from .serializers import (CreateSiteSerializer,  ListSiteSerializer, SiteSeriali
                          PostReviewSerializer)
 from .models import Site, Review
 from django.contrib.auth import get_user_model
+from setup import CustomPageNumberPagination
 
 
 
@@ -18,7 +19,7 @@ class SearchSiteAPI(APIView):
         q=request.data['q']
         queryset = Site.objects.filter(name__icontains=q)
         serializer = ListSiteSerializer(queryset, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(self.get_paginated_response(serializer.data), status=status.HTTP_200_OK)
 
 # create site
 class CreateSiteAPI(APIView):
@@ -31,12 +32,15 @@ class CreateSiteAPI(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class ListSitesAPI(APIView):
+class ListSitesAPI(APIView, CustomPageNumberPagination):
+    pagination_class = CustomPageNumberPagination
     def get(self, request, filter, format=None):
         filter_value = SITE_FILTERS[filter]['weigth']
         queryset = Site.mwitu.sites(filter_value)
-        serializer = ListSiteSerializer(queryset, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        results = self.paginate_queryset(queryset, request, view=self)
+        serializer = ListSiteSerializer(results, many=True)
+        return Response(self.get_paginated_response(serializer.data), status=status.HTTP_200_OK)
+    
     
 
 class SiteDetailsAPI(APIView):
@@ -45,7 +49,8 @@ class SiteDetailsAPI(APIView):
         serializer = SiteSerializer(site)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-class ListSiteReviewsAPI(APIView):
+class ListSiteReviewsAPI(APIView, CustomPageNumberPagination):
+    pagination_class = CustomPageNumberPagination
     def get(self, request, site_id, filter, format=None):
         site = get_object_or_404(Site, id=site_id)
         querysets = {
@@ -55,8 +60,10 @@ class ListSiteReviewsAPI(APIView):
             'mostrated' : Review.mwitu.most_rated().filter(site=site)
         }
         reviews = querysets[filter]
-        serializer = ReviewSerializer(reviews, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        results = self.paginate_queryset(reviews, request, view=self)
+        serializer = ReviewSerializer(results, many=True)
+        return Response(self.get_paginated_response(serializer.data), status=status.HTTP_200_OK)
+
 
 class PostReviewAPI(APIView):
     permission_classes =  [ IsAuthenticated ]

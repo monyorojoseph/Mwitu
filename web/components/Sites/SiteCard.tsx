@@ -7,8 +7,9 @@ export default function SiteCard({site}:{site: SiteCardType}){
 
     return(
         <>
-            <div key={site.id} className="group border rounded-md p-2 shadow-sm items-end">
-                <div className="h-28 aspect-w-1 overflow-hidden rounded-lg bg-gray-200 xl:aspect-h-8 xl:aspect-w-7">
+            <div key={site.id} className="border rounded-sm shadow-sm grid grid-cols-5">
+                <div className="h-32 aspect-w-1 overflow-hidden rounded-sm bg-gray-200 xl:aspect-h-8 xl:aspect-w-7 
+                col-span-1">
                     <img
                     src={getImageUrl(site.cover_image)}
                     alt={site.name}
@@ -16,16 +17,22 @@ export default function SiteCard({site}:{site: SiteCardType}){
                     />
                 </div>
 
-                <div className="mt-2 space-y-2">
-                    <Link href={`/site/${site.id}`}>                    
-                        <p className="mt-1 text-Night hover:text-PrincetonOrange">
-                            {site.name}
-                        </p>
-                    </Link>
-                    <div className="flex flex-row justify-between items-center">
-                        <RatedBar stars={site.avg_rating} extraStyles="text-lg"/>
-                        <h6 className="text-sm text-gray-500">{site.total_reviews} reviews</h6>
+                <div className="col-span-4 py-2 px-6">
+                    <div className="space-y-2 h-2/3">
 
+                        <Link href={`/site/${site.id}`}>                    
+                            <p className="mt-1 text-Night text-lg font-semibold
+                            hover:text-PrincetonOrange">
+                                {site.name}
+                            </p>
+                        </Link>
+                        <div className="flex flex-row justify-start items-center space-x-5">
+                            <RatedBar stars={site.avg_rating} extraStyles="text-lg"/>
+                            <h6 className="text-sm text-Night space-x-1">
+                                <span className="font-semibold">{site.total_reviews}</span> 
+                            <span className="text-gray-500">reviews</span></h6>
+
+                        </div>
                     </div>
                 </div>
             </div>

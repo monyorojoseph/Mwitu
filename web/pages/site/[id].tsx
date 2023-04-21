@@ -19,6 +19,8 @@ import Loader from "@/components/Loading/Loader";
 import Begger from "@/components/Begger/Begger";
 import { toast } from "react-toastify";
 import getImageUrl from "@/utils/imageUrl";
+import ZeroListing from "@/components/Empty/ZeroListings";
+import LoadMore from "@/components/Loading/LoadMore";
 
 export default function Site(){
     const router = useRouter()
@@ -138,7 +140,7 @@ function Reviews(){
     const router = useRouter()
     const { id } = router.query;
     const { filter, setFilter } = useReviewsContext()
-    const { reviews, loading } = useListReviews(id as string, filter.value)
+    const { reviews, loading, next } = useListReviews(id as string, filter.value)
 
     const handleVoteReview = async(review_id: string, vote_type: string)=> {
         const response = await voteReview({review_id, vote_type}) as AxiosResponse;
@@ -157,7 +159,7 @@ function Reviews(){
                 {!loading && (
 
                     <>
-                        { reviews?.map((review: Review)=> (
+                        {(reviews?.length > 0) && reviews.map((review: Review)=> (
                             <div key={review.id} className="rounded-md border border-gray-300 w-10/12 p-3 space-y-3 shadow-sm">
                                 {/* name and time */}
                                 <div className="flex flex-row justify-between items-center">
@@ -188,6 +190,11 @@ function Reviews(){
                                 </div>
                             </div>
                         ))}
+
+                        {(reviews?.length === 0) && <ZeroListing message="Be the first to leave a review ..." />}
+
+                        { next && <div className="w-10/12 p-3"><LoadMore /></div> }                        
+                        
                     </>
                 ) }
                 {loading && <Loader /> }

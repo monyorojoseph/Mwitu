@@ -19,11 +19,18 @@ export default function Setting(){
                         onClick={()=> setSettingTabs(SettingTabs[1])}>
                             Account
                         </span>
+
+                        <span className="py-2 px-3 cursor-pointer font-semibold text-lg"
+                        onClick={()=> setSettingTabs(SettingTabs[2])}>
+                            Donate
+                        </span>
                     </div>
                 </div>
                 <div className="border col-span-5 p-8 shadow-sm rounded-md">
                     { settingTabs == SettingTabs[0] && <Profile />}
                     { settingTabs == SettingTabs[1] &&  <Account />}
+                    { settingTabs == SettingTabs[2] &&  <Donate />}
+
                 </div>
                 
             </section>
@@ -77,5 +84,13 @@ function Account(){
                 > Remove Account </button>
             </section>
         </>
+    )
+}
+
+function Donate(){
+    return(
+        <>
+        <section>
+            Donate</section></>
     )
 }

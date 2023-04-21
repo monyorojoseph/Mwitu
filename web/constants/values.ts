@@ -35,4 +35,4 @@ export const SiteItems =  [
 ]
 
 export const ReviewTabs = ['reviews', 'leaveReview']
-export const SettingTabs = ['profile', 'account']
+export const SettingTabs = ['profile', 'account', 'donate']

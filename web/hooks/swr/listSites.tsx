@@ -5,8 +5,7 @@ import useSWR from 'swr'
 export const useSitesList = (filter: string)=> {
     const { data, isLoading } = useSWR(`/mwitu/list-site/${filter}/`, fetcher)
     return { 
-        sites: data.results as SiteCardType[], 
-        next: data.next,
+        sites: data as SiteCardType[], 
         loading: isLoading
     }
 }

@@ -140,7 +140,7 @@ function Reviews(){
     const router = useRouter()
     const { id } = router.query;
     const { filter, setFilter } = useReviewsContext()
-    const { reviews, loading, next } = useListReviews(id as string, filter.value)
+    const { reviews, loading } = useListReviews(id as string, filter.value)
 
     const handleVoteReview = async(review_id: string, vote_type: string)=> {
         const response = await voteReview({review_id, vote_type}) as AxiosResponse;
@@ -193,7 +193,7 @@ function Reviews(){
 
                         {(reviews?.length === 0) && <ZeroListing message="Be the first to leave a review ..." />}
 
-                        { next && <div className="w-10/12 p-3"><LoadMore /></div> }                        
+                        {/* { next && <div className="w-10/12 p-3"><LoadMore /></div> }                         */}
                         
                     </>
                 ) }

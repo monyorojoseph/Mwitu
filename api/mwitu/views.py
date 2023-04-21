@@ -39,7 +39,9 @@ class ListSitesAPI(APIView, CustomPageNumberPagination):
         queryset = Site.mwitu.sites(filter_value)
         results = self.paginate_queryset(queryset, request, view=self)
         serializer = ListSiteSerializer(results, many=True)
-        return Response(self.get_paginated_response(serializer.data), status=status.HTTP_200_OK)
+        # return Response(self.get_paginated_response(serializer.data), status=status.HTTP_200_OK)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
     
     
 
@@ -62,7 +64,9 @@ class ListSiteReviewsAPI(APIView, CustomPageNumberPagination):
         reviews = querysets[filter]
         results = self.paginate_queryset(reviews, request, view=self)
         serializer = ReviewSerializer(results, many=True)
-        return Response(self.get_paginated_response(serializer.data), status=status.HTTP_200_OK)
+        # return Response(self.get_paginated_response(serializer.data), status=status.HTTP_200_OK)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
 
 
 class PostReviewAPI(APIView):

@@ -6,14 +6,13 @@ import { SiteItems } from "@/constants/values";
 import { useSitesContext } from "@/hooks/contexts/sitesContext";
 import Loader from "../Loading/Loader";
 import ZeroListing from "../Empty/ZeroListings";
-import LoadMore from "../Loading/LoadMore";
+// import LoadMore from "../Loading/LoadMore";
 
 
 
 export default function ListSites(){
     const { filter, setFilter } = useSitesContext()
-    const { sites, loading, next } = useSitesList(filter.value)
-    console.log( next)
+    const { sites, loading } = useSitesList(filter.value)
     return(
         <>
             <div className="space-y-3">
@@ -26,7 +25,7 @@ export default function ListSites(){
                     ))}
                     {(sites?.length === 0) && <ZeroListing message="Nothing to see here"/>}
 
-                    { next && <LoadMore /> }
+                    {/* { next && <LoadMore /> } */}
                     
                     </div>)}
 

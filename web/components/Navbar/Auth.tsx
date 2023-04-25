@@ -54,11 +54,11 @@ export default function Auth(){
         )
     }else{
         return(
-            <>
+            <div className="flex flex-row justify-end items-center">
             <button
             className="border-2 border-GhostWhite rounded-md py-1 px-4 font-semibold
             hover:border-PrincetonOrange hover:text-PrincetonOrange"
-            onClick={()=> signIn()}>Sign Up</button></>
+            onClick={()=> signIn()}>Sign Up</button></div>
         )
     }
     

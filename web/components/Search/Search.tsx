@@ -28,7 +28,8 @@ export default function Search(){
             <section className="relative">
                 <div className="flex flex-row justify-center items-center space-x-2">
                     <input type="text" name="q"
-                    className="border rounded-md w-1/2 h-9 px-3 py-0 focus:ring-2 ring-PrincetonOrange outline-0 focus:outline-0" 
+                    className="border rounded-md w-1/2 h-9 px-3 py-0 
+                    focus:ring-2 ring-PrincetonOrange outline-0 focus:outline-0" 
                     value={q}
                     onChange={(e)=> setQ(e.target.value)}
                     placeholder="search for site here ..."/>

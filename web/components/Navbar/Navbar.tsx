@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import { AiOutlineAppstoreAdd } from 'react-icons/ai';
 import Auth from './Auth';
 import { AiFillStar } from 'react-icons/ai'
 
@@ -10,7 +9,7 @@ export default function Navbar(){
             <div className="mx-auto w-10/12
             grid grid-cols-12 gap-2 items-center py-1">
                 {/* logo */}
-                <div className="col-span-5">
+                <div className="col-span-6">
                     <Link href={'/'}>
                         <div className='flex flex-row justify-start items-center space-x-2'>
                             <AiFillStar className='text-3xl fill-PrincetonOrange'/>
@@ -19,16 +18,8 @@ export default function Navbar(){
                         </div>
                     </Link>
                 </div>
-                <div className="col-span-5 flex flex-row justify-end items-center">
-                    <Link href={'/site/add'}>                    
-                        <span>
-                            <AiOutlineAppstoreAdd 
-                            className='text-3xl cursor-pointer font-bold hover:text-PrincetonOrange'/>
-                        </span>
-                    </Link>
-                </div>
                 {/* login/signup */}
-                <div className="col-span-2">
+                <div className="col-span-6">
                     <Auth />
                 </div>
             </div>

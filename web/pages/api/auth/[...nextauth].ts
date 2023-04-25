@@ -1,7 +1,9 @@
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google"
+import type { NextAuthOptions } from 'next-auth'
 
-export default NextAuth({
+export const authOptions: NextAuthOptions ={
+    secret: process.env.NEXTAUTH_SECRET,
     providers: [
         GoogleProvider({
             clientId: process.env.GOOGLE_ID as string,
@@ -42,5 +44,14 @@ export default NextAuth({
         return session
       }
     },
+    pages: {
+      signIn: '/auth/signin',
+      // signOut: '/auth/signout',
+      // error: '/auth/error', // Error code passed in query string as ?error=
+      // verifyRequest: '/auth/verify-request', // (used for check email message)
+      // newUser: '/auth/new-user' // New users will be directed here on first sign in (leave the property out if not of interest)
+    },
     debug: false,
-});
+};
+
+export default NextAuth(authOptions);

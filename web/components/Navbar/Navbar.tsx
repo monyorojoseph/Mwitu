@@ -17,7 +17,7 @@ export default function Navbar(){
             <div className='container mx-auto'>
                 {/* actions */}
                 <div className='mt-1.5 grid grid-cols-12 gap-4'>
-                    <div className='col-span-8 flex flex-row justify-between items-center'>
+                    <div className='col-span-11 md:col-span-8 flex flex-row justify-between items-center'>
                         <span className='mx-3 px-2' onClick={()=> router.push('/')}>
                             <HiLightBulb className='text-3xl text-OrangePeel cursor-pointer fill-PrincetonOrange'/>
                         </span>
@@ -34,17 +34,19 @@ export default function Navbar(){
                         </span>
 
                     </div>
-                    <div className='col-span-4 flex flex-row justify-between space-x-2 items-center'>
-                        <div className='flex flex-row justify-start items-center'>
-                            <Business />
-                            <span className='px-2.5 hover:text-OrangePeel cursor-pointer py-1'>Donate</span>
+                    <div className='col-span-1 md:col-span-4 flex flex-row justify-end md:justify-between space-x-2 items-center'>
+                        <div className='hidden md:block'>
+                            <div className='flex flex-row justify-start items-center'>
+                                <Business />
+                                <span className='px-2.5 hover:text-OrangePeel cursor-pointer py-1'>Donate</span>
+                            </div>
                         </div>
                         <MyHam />
 
                     </div>
                 </div>
                 {/* tags */}
-                <div className='mt-2.5 flex flex-row justify-start items-center'>
+                <div className='mt-2.5 flex flex-row justify-start items-center overflow-x-auto'>
                     <span
                     onClick={()=> {
                         router.push('/')

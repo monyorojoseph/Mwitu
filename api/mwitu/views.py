@@ -1,14 +1,14 @@
 from django.shortcuts import get_object_or_404
+from django.core.paginator import Paginator
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
-from . import SITE_FILTERS
 from .serializers import (CreateSiteSerializer,  ListSiteSerializer, SiteSerializer, ReviewSerializer,
-                         PostReviewSerializer)
+                         PostReviewSerializer, CustomTagSerializer)
 from .models import Site, Review
 from django.contrib.auth import get_user_model
-from setup import CustomPageNumberPagination
+from taggit.models import Tag
 
 
 
@@ -19,7 +19,7 @@ class SearchSiteAPI(APIView):
         q=request.data['q']
         queryset = Site.objects.filter(name__icontains=q)
         serializer = ListSiteSerializer(queryset, many=True)
-        return Response(self.get_paginated_response(serializer.data), status=status.HTTP_200_OK)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 # create site
 class CreateSiteAPI(APIView):
@@ -32,14 +32,11 @@ class CreateSiteAPI(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class ListSitesAPI(APIView, CustomPageNumberPagination):
-    pagination_class = CustomPageNumberPagination
-    def get(self, request, filter, format=None):
-        filter_value = SITE_FILTERS[filter]['weigth']
-        queryset = Site.mwitu.sites(filter_value)
-        results = self.paginate_queryset(queryset, request, view=self)
-        serializer = ListSiteSerializer(results, many=True)
-        # return Response(self.get_paginated_response(serializer.data), status=status.HTTP_200_OK)
+class ListSitesAPI(APIView):
+    def get(self, request, format=None):
+        category = request.query_params.get('category')
+        queryset = Site.objects.filter(tags__name__in= [category])
+        serializer = ListSiteSerializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     
@@ -51,8 +48,7 @@ class SiteDetailsAPI(APIView):
         serializer = SiteSerializer(site)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-class ListSiteReviewsAPI(APIView, CustomPageNumberPagination):
-    pagination_class = CustomPageNumberPagination
+class ListSiteReviewsAPI(APIView):
     def get(self, request, site_id, filter, format=None):
         site = get_object_or_404(Site, id=site_id)
         querysets = {
@@ -62,9 +58,7 @@ class ListSiteReviewsAPI(APIView, CustomPageNumberPagination):
             'mostrated' : Review.mwitu.most_rated().filter(site=site)
         }
         reviews = querysets[filter]
-        results = self.paginate_queryset(reviews, request, view=self)
-        serializer = ReviewSerializer(results, many=True)
-        # return Response(self.get_paginated_response(serializer.data), status=status.HTTP_200_OK)
+        serializer = ReviewSerializer(reviews, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     
 
@@ -94,3 +88,19 @@ class VoteReviewAPI(APIView):
             if user in review.upvote.all():
                 review.upvote.remove(user)
             return Response(ReviewSerializer(review).data, status=status.HTTP_200_OK)
+
+class RecentActivityAPI(APIView):
+    permission_classes = []
+    def get(self, request, format=None):
+        queryset = Review.objects.all()[:9]
+        serializer = ReviewSerializer(queryset, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+# listing tags
+class TagListAPI(APIView):
+    permission_classes = []
+    def get(self, request, format=None):
+        queryset = Tag.objects.all()
+        serializer = CustomTagSerializer(queryset, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    

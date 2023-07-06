@@ -20,12 +20,12 @@ class LogoutAPI(APIView):
     permission_classes = [ IsAuthenticated ]
     def post(self, request, format=None):
         try:
-            refresh = request.data['refresh']
+            refresh = request.data.get('refresh')
             token = RefreshToken(refresh)
             token.blacklist()
             return Response(status=status.HTTP_200_OK)
         except Exception as e:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+            return Response({"detail": e}, status=status.HTTP_400_BAD_REQUEST)
 
 
 # add email auth later

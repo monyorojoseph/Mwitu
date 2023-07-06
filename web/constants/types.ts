@@ -1,18 +1,21 @@
 export interface SiteCardType {
     id: string;
     name: string;
-    cover_image: string;
+    logo: string;
     total_reviews: number;
     avg_rating: number;
+    tags: string[]
 }
 
 export interface SiteDetailsType {    
     name: string;
     cover_image: string;
+    logo: string;
     about: string;
     url: string;
     total_reviews: number;
     avg_rating: number;
+    tags: string[]
 }
 
 
@@ -21,9 +24,10 @@ export interface Item {
     value: string;
 }
 
-export interface Review {
+export interface ReviewType {
     id: number
     full_name: string
+    image: string
     comment: string
     timestamp: Date
     rating: number
@@ -36,4 +40,25 @@ export interface ProfileType {
     email: string
     image: string | null
     join_date: Date
+}
+
+export enum ContentTypes {
+    CATEGORY = 'CT',
+    RECENT = 'RT'
+}
+
+export interface Tag {
+    name: string
+}
+
+export interface TagOptionsType {
+    label: string
+    value: string;
+}
+
+export interface SiteContextType {
+    content: ContentTypes
+    setContent: Function
+    category?: string
+    setCategory: Function
 }

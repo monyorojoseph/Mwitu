@@ -12,17 +12,11 @@ module.exports = {
       current: 'currentColor',
       black: colors.black,
       white: colors.white,
-      gray: colors.gray,
-      emerald: colors.emerald,
-      indigo: colors.indigo,
-      yellow: colors.yellow,
-      Jet: '#303036',
-      ProcessCyan: '#30BCED',
-      GhostWhite: '#FFFAFF',
-      Tomato: '#FC5130',
-      Night: '#0F0F0F',
-      PrimstonGreen: '#3BC14A',
-      PrincetonOrange: '#FA9500'
+      CaribbeanCurrent: '#16697A',
+      MoonStone: '#489FB5',
+      SkyBlue: '#82C0CC',
+      Isabeline: '#EDE7E3',
+      OrangePeel: '#FFA62B'
     },    
     minHeight: {
         '80vh': '80vh',

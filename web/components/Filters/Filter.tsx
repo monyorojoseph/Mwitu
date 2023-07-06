@@ -11,13 +11,13 @@ export default function Filter({item, items, setItem}:{
     return (
         <>
             <div className="flex flex-row justify-start items-center space-x-3">
-                <h6 className="font-semibold text-sm text-ProcessCyan">Sort by</h6>
+                <h6 className="font-semibold text-sm text-CaribbeanCurrent">Sort by</h6>
                 <Menu as='div'
                 className="relative cursor-pointer z-10">
                     {({open})=>(
                         <>
                             <Menu.Button 
-                            className='p-1 flex flex-row justify-center items-center space-x-1 border rounded-md px-3 py-1 text-ProcessCyan focus:border-ProcessCyan'>
+                            className='p-1 flex flex-row justify-center items-center space-x-1 border rounded-md px-3 py-1 text-MoonStone focus:border-SkyBlue'>
                                 <span className="text-sm font-semibold">{item.label}</span>
                                 <span><ChevronDownIcon className={` h-5 w-5 ${open && "rotate-180 transform "}`} /></span>
                             </Menu.Button>
@@ -32,13 +32,13 @@ export default function Filter({item, items, setItem}:{
                                     leaveTo="transform scale-95 opacity-0"
                                 >
                                     <Menu.Items static as='section' 
-                                    className="absolute top-2 left-5 bg-GhostWhite flex flex-col justify-center items-start space-y-3 py-3
-                                    border w-60 rounded-md">
+                                    className="absolute top-2 left-5 bg-white flex flex-col justify-center items-start space-y-3 py-3
+                                    border w-60 rounded-sm shadow-md border-SkyBlue border-opacity-20">
                                         {
                                             items?.map((itm)=>(
                                                 <Menu.Item key={itm.label}>
                                                         <span className={`py-1 px-6 w-full 
-                                                        ${item?.value === itm.value && "font-bold text-opacity-75 text-ProcessCyan"}`}
+                                                        ${item?.value === itm.value && "font-bold text-opacity-75 text-MoonStone"}`}
                                                         onClick={()=> setItem(itm)}>{itm.label}</span>
                                                 </Menu.Item>
                                             ))

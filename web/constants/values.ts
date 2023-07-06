@@ -18,21 +18,5 @@ export const ReviewItems =  [
     },
 ]
 
-
-export const SiteItems =  [
-    {
-        label: 'The Good',
-        value: 'good'
-    },
-    {
-        label: 'The Bad',
-        value: 'bad'
-    },
-    {
-        label: 'The Ugly',
-        value: 'ugly'
-    }
-]
-
-export const ReviewTabs = ['reviews', 'leaveReview']
+export const SiteDetailsTabs = ['reviews', 'leaveReview', 'about']
 export const SettingTabs = ['profile', 'account', 'donate']

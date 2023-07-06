@@ -2,85 +2,93 @@ import Layout from "@/components/Layout/Layout";
 import RatedBar from "@/components/Ratings/RatedBar";
 import RatingBar from "@/components/Ratings/RatingBar";
 import { useState } from "react";
-import { BiUpvote, BiDownvote,  } from 'react-icons/bi';
 import { TbWorldWww } from 'react-icons/tb';
 import { HiOutlineMail } from 'react-icons/hi'
 import { useRouter } from "next/router";
 import { useSitesDetails } from "@/hooks/swr/siteDetails";
 import Filter from "@/components/Filters/Filter";
-import { Review } from "@/constants/types";
 import { useListReviews } from "@/hooks/swr/listReviews";
-import { monthDate } from "@/utils/date";
-import { postReview, voteReview } from "@/services/sites";
+import { postReview } from "@/services/sites";
 import { AxiosResponse } from "axios";
 import { ReviewsContextProvider, useReviewsContext } from "@/hooks/contexts/reviewsContext";
-import { ReviewItems, ReviewTabs } from "@/constants/values";
+import { ReviewItems, SiteDetailsTabs } from "@/constants/values";
 import Loader from "@/components/Loading/Loader";
 import { toast } from "react-toastify";
 import getImageUrl from "@/utils/imageUrl";
 import ZeroListing from "@/components/Empty/ZeroListings";
-import LoadMore from "@/components/Loading/LoadMore";
+import ListingTags from "@/components/Tags/ListingTags";
+import Review from "@/components/Review/Review";
+import { ReviewType } from "@/constants/types";
 
 export default function Site(){
     const router = useRouter()
     const { id } = router.query;
+    const [ tab, setTab ] = useState<string>(SiteDetailsTabs[0])
+
 
     return(
         <Layout>
             <>
-                {id && (<section className="my-5">
-                    <div className="grid grid-cols-8 gap-4">                     
-                        {/* review container */}
-                        <div className="col-span-4">
-                            <ReviewContainer /></div> 
-                        {/* rating values and site details */}
-                        <div className="col-span-4">
-                            <SiteImage />
-                            <SiteDetails />
-                            <AverageRatingValues />
-                        </div>
-                    </div>  
-                    {/* Related */}
-                    <div></div>
+                {id && 
+                (<section className="w-full">
+                    <SiteHeader tab={tab} setTab={setTab} />
+                    <div className="w-9/12 mx-auto min-h-80vh my-6 ">
+                        { tab === SiteDetailsTabs[0] && <ReviewsContextProvider><Reviews /></ReviewsContextProvider>}
+                        { tab === SiteDetailsTabs[1] && <LeaveReview tab={tab} setTab={setTab} /> }
+                        { tab === SiteDetailsTabs[2] && <SiteDetails /> }
+                    </div>
                 </section>)}
             </>
         </Layout>
     )
 }
 
-function AverageRatingValues(){
+const SiteHeader = ({tab, setTab}:{tab: string; setTab: Function})=> {
     const router = useRouter()
     const { id } = router.query;
     const { site, loading } = useSitesDetails(id as string)
 
-    return(<>
-        {!loading && (<div className="border rounded-md shadow-sm p-2 space-y-2 mb-2">
-            <h4 className="text-lg font-semibold mx-2 mb-3">Average Rating</h4>
-            <RatedBar stars={site?.avg_rating} extraStyles="text-3xl mx-2 mb-3"/>
-
-        </div>)}
-        { loading && <Loader /> }
-        </>)
-}
-
-function SiteImage(){
-    const router = useRouter()
-    const { id } = router.query;
-    const { site, loading } = useSitesDetails(id as string)
     return(
-        <>
-        {!loading && (<div className="border mb-2 rounded-md p-3">
-            <div className="h-28 aspect-w-1 overflow-hidden rounded-lg bg-gray-200 xl:aspect-h-8 xl:aspect-w-7">
-                <img
-                src={getImageUrl(site.cover_image)}
-                alt={site.name}
-                className="h-full w-full object-cover object-center"
-                />
+        <div className="border-b border-SkyBlue border-opacity-20 shadow-sm">
+            <div className="w-full h-40 relative">
+                <img src={getImageUrl(site?.cover_image)} alt='cover image' className="w-full h-full object-cover object-center" />  
+
+                <div className="absolute z-30 top-0 bg-black bg-opacity-40 h-40 w-full">
+                    <div className="w-9/12 mx-auto h-full flex flex-row justify-start items-start mt-5 space-x-4">
+                        <div className="h-28 w-28">
+                            <img
+                            src={getImageUrl(site?.logo)}
+                            alt={site?.name}
+                            className="h-full w-full object-cover rounded-md object-center"
+                            />
+                        </div>
+                        <div className="text-Isabeline font-semibold">
+                            <h4 className="text-2xl ">{site?.name}</h4>
+                            <div className="">
+                                <h4 className="mb-1">Average Rating</h4>
+                                <RatedBar stars={site?.avg_rating} extraStyles="text-2xl mb-1.5"/>
+                            </div>
+                            <p className="text-xs">{site?.total_reviews} reviews</p>                            
+                        </div>
+                    </div>
+
+                </div>                      
             </div>
-        </div>)}
-        {loading && <Loader />}
-        </>
+
+            <div className="w-9/12 mx-auto py-1.5 flex flex-row justify-start items-center">
+                <span onClick={()=>setTab(SiteDetailsTabs[0])}
+                className={`py-1 px-3 font-semibold cursor-pointer 
+                    ${tab === SiteDetailsTabs[0] ? "text-CaribbeanCurrent" : "text-MoonStone"} `}>Reviews</span>
+                <span onClick={()=>setTab(SiteDetailsTabs[1])}
+                className={`py-1 px-3 font-semibold cursor-pointer 
+                    ${tab === SiteDetailsTabs[1] ? "text-CaribbeanCurrent" : "text-MoonStone"} `}>Leave Review</span>
+                <span onClick={()=>setTab(SiteDetailsTabs[2])}
+                className={`py-1 px-3 font-semibold cursor-pointer 
+                    ${tab === SiteDetailsTabs[2] ? "text-CaribbeanCurrent" : "text-MoonStone"} `}>About</span>
+            </div>
+        </div>
     )
+
 }
 
 function SiteDetails(){
@@ -89,14 +97,12 @@ function SiteDetails(){
     const { site, loading } = useSitesDetails(id as string)
     
     return(<>
-    {!loading && (<div className="border rounded-md mb-3 divide-y">
-        <div className="py-1 px-3 text-lg font-semibold">
-            {site?.name}
-        </div>
-        <div className="py-1 px-3">{site?.about}</div>
-        <div className="py-1 px-3">
+    {!loading && (<div className="rounded-md space-y-3">
+        <div className="py-1">{site?.about}</div>
+        <ListingTags tags={site?.tags} />
+        <div className="py-1">
             <a href={site?.url} target="_blank" rel="noopener noreferrer"
-            className="flex flex-row justify-start items-center space-x-5 hover:text-ProcessCyan">
+            className="flex flex-row justify-start items-center space-x-5 text-MoonStone hover:text-CaribbeanCurrent">
                 <TbWorldWww className="text-2xl font-semibold"/>
                 <span>{site?.name}</span>
             </a>
@@ -108,47 +114,12 @@ function SiteDetails(){
     {loading && <Loader />}</>)
 }
 
-function ReviewContainer(){
-    const [ tab, setTab ] = useState<string>(ReviewTabs[0])
-    return (
-        <>
-            <ReviewsContextProvider>
-                <div>
-                    {/* tabs */}
-                    <div className="flex flex-row justify-start items-center space-x-3 mb-3">
-                        <span className="bg-Jet py-1 px-3 text-GhostWhite rounded-md 
-                        font-semibold cursor-pointer"
-                        onClick={()=> setTab(ReviewTabs[0])}>Reviews</span>
-                        <span className="bg-Jet py-1 px-3 text-GhostWhite rounded-md 
-                        font-semibold cursor-pointer"
-                        onClick={()=> setTab(ReviewTabs[1])}>Leave a review</span>
-                    </div>
-                    {/* tabs content */}
-                    {  tab === ReviewTabs[0] && <Reviews />}
-                    {  tab === ReviewTabs[1] && <LeaveReview setTab={setTab}/>}
-
-                </div>
-            </ReviewsContextProvider>
-        </>
-    )
-}
-
 function Reviews(){
 
     const router = useRouter()
     const { id } = router.query;
     const { filter, setFilter } = useReviewsContext()
     const { reviews, loading } = useListReviews(id as string, filter.value)
-
-    const handleVoteReview = async(review_id: string, vote_type: string)=> {
-        const response = await voteReview({review_id, vote_type}) as AxiosResponse;
-        if (response.status == 200){
-            // toastify
-            vote_type == 'up' && toast.success('Up Voted')
-            vote_type == 'down' && toast.success('Down Voted')
-        }
-    }
-
 
     return(
         <>
@@ -157,36 +128,8 @@ function Reviews(){
                 {!loading && (
 
                     <>
-                        {(reviews?.length > 0) && reviews.map((review: Review)=> (
-                            <div key={review.id} className="rounded-md border border-gray-300 w-10/12 p-3 space-y-3 shadow-sm">
-                                {/* name and time */}
-                                <div className="flex flex-row justify-between items-center">
-                                    <h2 className="font-semibold text-lg">{review.full_name}</h2>
-                                    <h2 className="text-sm">{monthDate(review.timestamp)}</h2>
-                                </div>
-                                {/* rating bar */}
-                                <div>
-                                    <RatedBar stars={review.rating}/>
-                                </div>
-                                {/* review text */}
-                                <div>
-                                    <p>{review.comment}</p>
-                                </div>
-                                {/* action */}
-                                <div className="flex flex-row justify-start items-center space-x-2">
-                                    <span className=" flex flex-row items-center space-x-2">
-                                        <BiUpvote onClick={()=> handleVoteReview(review.id.toString(), 'up' )}
-                                        className="text-2xl cursor-pointer text-PrimstonGreen"/>
-                                        <p className="text-xs font-semibold text-Night">{review.upvotes}</p>
-                                    </span>
-                                    <span className=" flex flex-row items-center space-x-2">
-                                        <BiDownvote onClick={()=> handleVoteReview(review.id.toString(), 'down' )}
-                                        className="text-2xl cursor-pointer text-Tomato"/>
-                                        <p className="text-xs font-semibold text-Night">{review.downvotes}</p>
-
-                                    </span>
-                                </div>
-                            </div>
+                        {(reviews?.length > 0) && reviews.map((review: ReviewType)=> (
+                            <Review recent={false} review={review} key={review.id} />
                         ))}
 
                         {(reviews?.length === 0) && <ZeroListing message="Be the first to leave a review ..." />}
@@ -201,7 +144,7 @@ function Reviews(){
     )
 }
 
-function LeaveReview({setTab}:{setTab: Function}){
+function LeaveReview({tab, setTab}:{tab: string; setTab: Function}){
     const [ stars, setStars ] = useState<number>(0)
     const [ review, setReview ] = useState<string>('')
     const [ loading, setLoading ] = useState<boolean>(false)
@@ -216,7 +159,7 @@ function LeaveReview({setTab}:{setTab: Function}){
         setLoading(false)
     if ( resp?.status === 201){
         // react toastify
-        setTab(ReviewTabs[0])
+        setTab(SiteDetailsTabs[0])
         toast.success('Review posted')
     }
 
@@ -230,12 +173,11 @@ function LeaveReview({setTab}:{setTab: Function}){
                     name="review"
                     rows={3}
                     onChange={(e)=> setReview(e.target.value)}
-                    className="block w-full rounded-md border-0 text-Night shadow-sm p-2 bg-GhostWhite
-                    placeholder:text-gray-400  focus:ring-2 ring-PrincetonOrange outline-0 focus:outline-0"
+                    className="block w-full rounded-md border text-black text-opacity-90 shadow-sm p-2 border-SkyBlue outline-none"
                     defaultValue={review}
                     />
 
-                    <p className="mt-3 text-sm leading-6 text-gray-600">Write a few sentences on what you like or hate about this site.</p>
+                    <p className="mt-3 text-sm leading-6 text-MoonStone">Write a few sentences on what you like or hate about this site.</p>
                 </div>
 
                 <div>
@@ -243,7 +185,8 @@ function LeaveReview({setTab}:{setTab: Function}){
                 </div>
 
                 <div>
-                    <button className="py-1 px-4 text-GhostWhite font-semibold bg-PrimstonGreen disabled:bg-Jet disabled:bg-opacity-30 rounded-md"
+                    <button className="py-1 px-4 text-CaribbeanCurrent border font-semibold bg-PrimstonGreen disabled:bg-Jet 
+                    disabled:bg-opacity-30 rounded-md"
                     onClick={handlePost} disabled={review ===  '' && stars === 0}>
                         {loading ? 'Posting...' : 'Post'}
                     </button>

@@ -1,15 +1,17 @@
 import '@/styles/globals.css'
 import 'react-toastify/dist/ReactToastify.css';
-import 'react-mpesa-stk/dist/index.css'
 import type { AppProps } from 'next/app'
 import { SessionProvider } from "next-auth/react"
 import { ToastContainer } from 'react-toastify'
+import { SitesContextProvider } from '@/hooks/contexts/sitesContext';
 
 export default function App({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   return (
     <SessionProvider session={session} refetchInterval={600 * 60} refetchOnWindowFocus={false}>
       <>
-        <Component {...pageProps} />
+        <SitesContextProvider>     
+          <Component {...pageProps} />
+        </SitesContextProvider>
         <ToastContainer 
         
           position="top-right"

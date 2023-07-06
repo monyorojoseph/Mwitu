@@ -1,19 +1,18 @@
-import HeroSection from '@/components/Hero/HeroSection';
-import MainPreview from '@/components/Sites/MainPreview';
 import Layout from '@/components/Layout/Layout';
-import { SitesContextProvider } from '@/hooks/contexts/sitesContext';
+import ListSites from '@/components/Sites/ListSites';
+import Recent from '@/components/Sites/Recent';
+import { ContentTypes } from '@/constants/types';
+import { useSitesContext } from '@/hooks/contexts/sitesContext';
 
 export default function Home() {
+  const { content } = useSitesContext()
   return (
-    <>
-      <SitesContextProvider>
-        <Layout>
-          <>
-            <HeroSection />
-            <MainPreview />
-          </>
-        </Layout>
-      </SitesContextProvider>
-    </>
+      <Layout>
+        <>
+          { content === ContentTypes.RECENT && <Recent />}
+          { content === ContentTypes.CATEGORY && <ListSites />}          
+
+        </>
+      </Layout>
   )
 }

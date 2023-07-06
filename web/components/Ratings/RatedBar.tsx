@@ -4,10 +4,10 @@ export default function RatedBar({ stars, extraStyles }: {stars: number; extraSt
     const numStars = [1, 2, 3, 4, 5];
     const ratingStars = numStars.map((value)=> value <= stars ? (
         <AiFillStar key={value}
-        className={`text-PrincetonOrange text-2xl ${extraStyles}`}/>
+        className={`text-OrangePeel text-2xl ${extraStyles}`}/>
     ) :
     (<AiOutlineStar key={value}
-        className={`text-PrincetonOrange text-2xl ${extraStyles}`}/>))
+        className={`text-OrangePeel text-2xl ${extraStyles}`}/>))
     return(
         <>
         <div className="flex flex-row justify-start items-center">

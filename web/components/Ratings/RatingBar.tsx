@@ -5,10 +5,10 @@ export default function RatingBar({ stars, setStars }: {stars: number; setStars:
     const numStars = [1, 2, 3, 4, 5];
     const ratingStars = numStars.map((value)=> value <= stars ? (
         <AiFillStar key={value} onClick={()=> setStars(value)} onMouseEnter={()=> setStars(value)}
-        className="text-PrincetonOrange text-3xl"/>
+        className="text-OrangePeel text-2xl"/>
     ) :
     (<AiOutlineStar key={value} onClick={()=> setStars(value)} onMouseEnter={()=> setStars(value)}
-        className="text-PrincetonOrange text-3xl"/>))
+        className="text-OrangePeel text-2xl"/>))
     return(
         <>
         <div className="flex flex-row justify-start items-center">

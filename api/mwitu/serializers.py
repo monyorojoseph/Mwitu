@@ -1,29 +1,36 @@
 from rest_framework import serializers
 from .models import Site, Review
+from taggit.models import Tag
+from taggit.serializers import (TagListSerializerField, TaggitSerializer)
 
 class CreateSiteSerializer(serializers.Serializer):
     cover_image = serializers.ImageField()
     name = serializers.CharField()
     url = serializers.URLField()
     about = serializers.CharField()
+    tags = serializers.ListField(
+        child=serializers.CharField()
+    )
 
     def create(self, validated_data):
         return Site.objects.create(**validated_data)
 
-class ListSiteSerializer(serializers.ModelSerializer):
+class ListSiteSerializer(TaggitSerializer, serializers.ModelSerializer):
+    tags = TagListSerializerField()
     class Meta:
         model = Site
-        fields = ['id', 'name', 'cover_image', 'total_reviews', 'avg_rating']
+        fields = ['id', 'name', 'logo', 'total_reviews', 'avg_rating', 'tags']
 
-class SiteSerializer(serializers.ModelSerializer):
+class SiteSerializer(TaggitSerializer, serializers.ModelSerializer):
+    tags = TagListSerializerField()
     class Meta:
         model = Site
-        fields = ['name', 'cover_image', 'url', 'about', 'total_reviews', 'avg_rating']
+        fields = ['name', 'logo', 'cover_image', 'url', 'about', 'total_reviews', 'avg_rating', 'tags']
 
 class ReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Review
-        fields = ['id', 'full_name', 'comment', 'timestamp', 'rating', 'upvotes', 'downvotes']
+        fields = ['id', 'full_name', 'image', 'comment', 'timestamp', 'rating', 'upvotes', 'downvotes']
 
 class PostReviewSerializer(serializers.Serializer):
     comment = serializers.CharField()
@@ -32,3 +39,8 @@ class PostReviewSerializer(serializers.Serializer):
 
     def create(self, validated_data):
         return Review.objects.create(**validated_data)
+
+class CustomTagSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Tag 
+        fields = ['name']

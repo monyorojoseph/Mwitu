@@ -1,19 +1,17 @@
-import { Item } from "@/constants/types";
-import { SiteItems } from "@/constants/values";
+import { ContentTypes, SiteContextType } from "@/constants/types";
 import { useContext, createContext, useState } from "react";
 
-interface SiteContextType {
-    filter: Item
-    setFilter: Function
-}
+
 
 const SitesContext = createContext({} as SiteContextType);
 
 const SitesContextProvider = ({children}:{children: JSX.Element})=> {
 
-    const [ filter, setFilter ] = useState<Item>(SiteItems[0])
+    const [ content, setContent ] = useState<ContentTypes>(ContentTypes.RECENT)
+    const [ category, setCategory ] = useState<string>()
+
     return(
-        <SitesContext.Provider value={{filter, setFilter}}>
+        <SitesContext.Provider value={{content, setContent, category, setCategory }}>
             {children}
         </SitesContext.Provider>
     )

@@ -2,29 +2,21 @@ import uuid
 from django.db import models
 from django.core.validators import MaxValueValidator
 from django.db.models import Avg, Count
-
-class SiteManager(models.Manager):
-    def sites(self, weight):
-        queryset = self.annotate(avg_rating=Avg('site_reviews__rating'))
-        if weight >= 4:
-            return queryset.filter(avg_rating__gte=4)
-        elif weight == 3:
-            return queryset.filter(avg_rating=3)
-        else:
-            return queryset.filter(avg_rating__lte=2)
+from taggit.managers import TaggableManager
 
 class Site(models.Model):
-    id = models.UUIDField(primary_key=True, editable=False, default=uuid.uuid4)
     name = models.CharField(max_length=200, unique=True)    # version 2.0 will be flex
     url = models.URLField(max_length=250, unique=True)
     cover_image = models.ImageField(upload_to='sites/', null=True, blank=True)
+    logo = models.ImageField(upload_to='sites/', null=True, blank=True)
     managed_by = models.ForeignKey('account.CustomUser', related_name='sites',   on_delete=models.SET_NULL, null=True)
     timestamp = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+    tags = TaggableManager(blank=True, related_name='sites_tags')
     about = models.TextField()
+    slug = models.SlugField(blank=True, null=True)
 
     objects = models.Manager()    
-    mwitu = SiteManager()
 
     def __str__(self) -> str:
         return self.name
@@ -67,6 +59,9 @@ class Review(models.Model):
     
     def full_name(self):
         return self.user.profile.full_name
+    
+    def image(self):
+        return self.user.profile.image.url
     
     def upvotes(self):
         return self.upvote.count()

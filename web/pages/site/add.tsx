@@ -2,12 +2,22 @@ import Layout from "@/components/Layout/Layout";
 import { createSite } from "@/services/sites";
 import { AxiosResponse } from "axios";
 import { useRouter } from "next/router";
-import { useState } from "react";
-import { BsCardImage } from 'react-icons/bs'
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import Image from "next/image";
+import { logo } from "@/constants/images";
+import Select from 'react-select';
+import makeAnimated from 'react-select/animated';
+import { useTagList } from "@/hooks/swr/tagList";
+import { createTagsOptions } from "@/utils/tags";
+import { TagOptionsType } from "@/constants/types";
+
+const animatedComponents = makeAnimated();
+
 
 export default function Add(){
     const router = useRouter()
+    const { tags } = useTagList()
     const [ loading, setLoading ] = useState<boolean>(false)
 
     const onSubmitHandler = async(e: React.SyntheticEvent)=> {
@@ -24,44 +34,18 @@ export default function Add(){
         }
     }
 
+
     return(
         <Layout>
             <>
-                <section className="space-y-3 mt-5 mb-10">
+                <section className="w-11/12 md:w-10/12 lg:w-8/12 mx-auto mt-5 mb-10">
                     {/* form */}
-                    <form className="space-y-3" onSubmit={onSubmitHandler} id="form" encType="multipart/form-data">
-                        <div className="grid grid-cols-6 gap-3">
-
-                        <div className="col-span-6">
-                            <label htmlFor="cover-photo" className="block text-lg font-semibold leading-6 text-gray-900">
-                                Website logo
-                            </label>
-                            <div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-4">
-                                <div className="text-center">
-                                    <BsCardImage className="mx-auto h-12 w-12 text-gray-300" aria-hidden="true" />
-                                    <div className="mt-4 flex text-sm leading-6 text-gray-600">
-                                        <label
-                                        htmlFor="file-upload"
-                                        className="relative cursor-pointer rounded-md bg-GhostWhite font-semibold text-PrincetonOrange
-                                         focus-within:outline-none focus-within:ring-2 focus-within:ring-ptext-PrincetonOrange 
-                                         focus-within:ring-offset-2 hover:text-PrincetonOrange"
-                                        >
-                                        <span>Upload a file</span>
-                                        <input id="file-upload" name="cover_image" type="file" className="sr-only" required />
-                                        </label>
-                                        <p className="pl-1">or drag and drop</p>
-                                    </div>
-                                    <p className="text-xs leading-5 text-gray-600">PNG, JPG, GIF up to 10MB</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        </div>
+                    <form className="space-y-4" onSubmit={onSubmitHandler}>
 
                         <div className="grid grid-cols-12 gap-3 items-center">
                             <div className="sm:col-span-6">
-                                <label htmlFor="first-name" className="block text-lg font-semibold leading-6 text-gray-900">
-                                    Website name
+                                <label htmlFor="first-name" className="block text-lg leading-6 text-CaribbeanCurrent">
+                                    name
                                 </label>
                                 <div className="mt-2">
                                     <input
@@ -69,15 +53,15 @@ export default function Add(){
                                     name="name"
                                     autoComplete="website-name"
                                     required
-                                    className="block w-full px-3 rounded-md border-0 py-1.5 text-gray-900 shadow-sm bg-GhostWhite
-                                  placeholder:text-gray-400 sm:text-sm sm:leading-6 focus:ring-2 ring-PrincetonOrange outline-0 focus:outline-0"
+                                    className="block w-full px-3 rounded-md border py-1.5 text-black text-opacity-90 border-SkyBlue
+                                  placeholder:text-MoonStone sm:text-sm sm:leading-6 outline-0 focus:outline-0"
                                     />
                                 </div>
                             </div>
 
                             <div className="sm:col-span-6">
-                                <label htmlFor="last-name" className="block text-lg font-semibold leading-6 text-gray-900">
-                                    Website url
+                                <label htmlFor="last-name" className="block text-lg leading-6 text-CaribbeanCurrent">
+                                    url
                                 </label>
                                 <div className="mt-2">
                                     <input
@@ -85,34 +69,70 @@ export default function Add(){
                                     name="url"
                                     autoComplete="website-url"
                                     required
-                                    className="block w-full px-3 rounded-md border-0 py-1.5 text-gray-900 shadow-sm  bg-GhostWhite
-                                     placeholder:text-gray-400 sm:text-sm sm:leading-6 focus:ring-2 ring-PrincetonOrange 
-                                     outline-0 focus:outline-0"
+                                    className="block w-full px-3 rounded-md border py-1.5 text-black text-opacity-90 border-SkyBlue
+                                    placeholder:text-MoonStone sm:text-sm sm:leading-6 outline-0 focus:outline-0"
                                     />
                                 </div>
                             </div>
                         </div>
 
-                        <div className="space-y-3">
-
-                            <label htmlFor="cover-photo" className="block text-lg font-semibold leading-6 text-gray-900">
-                                About / Description
+                        <div>
+                            <label htmlFor="cover-photo" className="block text-lg leading-6 text-CaribbeanCurrent">
+                                about
                             </label>
                             <div className="mt-2">
                                 <textarea
                                 name="about"
                                 rows={3}
-                                className="block w-full rounded-md border-0 text-Night shadow-sm p-2 bg-GhostWhite
-                                placeholder:text-gray-400 focus:ring-2 ring-PrincetonOrange outline-0 focus:outline-0"
+                                className="block w-full px-3 rounded-md border py-1.5 text-black text-opacity-90 border-SkyBlue
+                                placeholder:text-MoonStone sm:text-sm sm:leading-6 outline-0 focus:outline-0"
                                 required
                                 placeholder="Write something ..."
                                 />
                             </div>
                         </div>
 
+                        <div className="grid grid-cols-12 gap-3 items-start">
+                            <div className="col-span-2">
+                                <label htmlFor="cover-photo" className="block text-lg leading-6 text-CaribbeanCurrent">
+                                    logo
+                                </label>
+                                <div className="w-20 h-20 relative mt-2">
+                                    <Image src={logo} alt="alt logo" className="object-scale-down object-center h-full w-full" />
+                                    <label htmlFor="logo"
+                                        className="cursor-pointer absolute 
+                                        h-20 w-20 top-0 bg-white bg-opacity-75 flex flex-row justify-center items-center">
+                                            <p className="text-sm text-CaribbeanCurrent font-semibold">upload logo</p>
+                                        <input id="logo" name="logo" type="file" className="sr-only" required />
+
+                                    </label>
+                                </div>
+                            </div>
+                            <div className="col-span-10">
+
+                                <label htmlFor="cover-photo" className="block text-lg leading-6 text-CaribbeanCurrent">
+                                    tag
+                                </label>
+
+                                <div className="mt-2">
+                                    <Select
+                                        className="basic-multi-select"
+                                        classNamePrefix="select"
+                                        isMulti
+                                        components={animatedComponents}
+                                        isClearable={true}
+                                        isSearchable={true}
+                                        name="tags"
+                                        options={[]}
+                                    />
+                                </div>
+
+                            </div>
+                        </div>
+
                         <div>
                             <button type="submit" 
-                            className="py-1 px-4 rounded-md bg-PrimstonGreen text-GhostWhite font-semibold">
+                            className="py-1 px-4 rounded-md text-CaribbeanCurrent font-semibold border">
                                 {loading ? 'Adding' : 'Add' }
                             </button>
                         </div>

@@ -6,8 +6,15 @@ export const authOptions: NextAuthOptions ={
     secret: process.env.NEXTAUTH_SECRET,
     providers: [
         GoogleProvider({
-            clientId: process.env.GOOGLE_ID as string,
-            clientSecret: process.env.GOOGLE_SECRET as string,
+          clientId: process.env.GOOGLE_ID as string,
+          clientSecret: process.env.GOOGLE_SECRET as string,
+          authorization: {
+            params: {
+              prompt: "consent",
+              access_type: "offline",
+              response_type: "code"
+            }
+          }
         }),
     ],
     session: {
@@ -39,7 +46,7 @@ export const authOptions: NextAuthOptions ={
           // @ts-ignore
           session.access = token.data.tokens.access
           // @ts-ignore
-          session.refresh = token.data.tokens.refresh          
+          session.refresh = token.data.tokens.refresh
         }
         return session
       }

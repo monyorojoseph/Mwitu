@@ -11,7 +11,7 @@ import { useListReviews } from "@/hooks/swr/listReviews";
 import { postReview } from "@/services/sites";
 import { AxiosResponse } from "axios";
 import { ReviewsContextProvider, useReviewsContext } from "@/hooks/contexts/reviewsContext";
-import { ReviewItems, SiteDetailsTabs } from "@/constants/values";
+import { ReviewItems, SiteDetailsTabs, slateInitialValue } from "@/constants/values";
 import Loader from "@/components/Loading/Loader";
 import { toast } from "react-toastify";
 import getImageUrl from "@/utils/imageUrl";
@@ -19,6 +19,8 @@ import ZeroListing from "@/components/Empty/ZeroListings";
 import ListingTags from "@/components/Tags/ListingTags";
 import Review from "@/components/Review/Review";
 import { ReviewType } from "@/constants/types";
+import { EditSlateNode, ReadSlateNode } from "@/components/SlateNode/SlateNode";
+import { Descendant } from "slate";
 
 export default function Site(){
     const router = useRouter()
@@ -98,7 +100,9 @@ function SiteDetails(){
     
     return(<>
     {!loading && (<div className="rounded-md space-y-3">
-        <div className="py-1">{site?.about}</div>
+        <div className="py-1">
+            <ReadSlateNode initialValue={site.about} />
+        </div>
         <ListingTags tags={site?.tags} />
         <div className="py-1">
             <a href={site?.url} target="_blank" rel="noopener noreferrer"
@@ -146,7 +150,7 @@ function Reviews(){
 
 function LeaveReview({tab, setTab}:{tab: string; setTab: Function}){
     const [ stars, setStars ] = useState<number>(0)
-    const [ review, setReview ] = useState<string>('')
+    const [ review, setReview ] = useState<Descendant[]>(slateInitialValue)
     const [ loading, setLoading ] = useState<boolean>(false)
 
     const router = useRouter()
@@ -155,7 +159,11 @@ function LeaveReview({tab, setTab}:{tab: string; setTab: Function}){
     const handlePost = async (e:React.SyntheticEvent)=> {
         e.preventDefault()
         setLoading(true)
-        const resp = await postReview({ comment: review, rating: stars, site_id: id}) as AxiosResponse;
+        const resp = await postReview({ 
+            comment: JSON.stringify(review), 
+            rating: stars, 
+            site_id: id
+        }) as AxiosResponse;
         setLoading(false)
     if ( resp?.status === 201){
         // react toastify
@@ -169,14 +177,7 @@ function LeaveReview({tab, setTab}:{tab: string; setTab: Function}){
         <>
             <div className="space-y-3">
                 <div>
-                    <textarea
-                    name="review"
-                    rows={3}
-                    onChange={(e)=> setReview(e.target.value)}
-                    className="block w-full rounded-md border text-black text-opacity-90 shadow-sm p-2 border-SkyBlue outline-none"
-                    defaultValue={review}
-                    />
-
+                    <EditSlateNode initialValue={review} setTextValue={setReview} />
                     <p className="mt-3 text-sm leading-6 text-MoonStone">Write a few sentences on what you like or hate about this site.</p>
                 </div>
 
@@ -187,7 +188,7 @@ function LeaveReview({tab, setTab}:{tab: string; setTab: Function}){
                 <div>
                     <button className="py-1 px-4 text-CaribbeanCurrent border font-semibold bg-PrimstonGreen disabled:bg-Jet 
                     disabled:bg-opacity-30 rounded-md"
-                    onClick={handlePost} disabled={review ===  '' && stars === 0}>
+                    onClick={handlePost}>
                         {loading ? 'Posting...' : 'Post'}
                     </button>
                 </div>

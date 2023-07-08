@@ -20,3 +20,10 @@ export const ReviewItems =  [
 
 export const SiteDetailsTabs = ['reviews', 'leaveReview', 'about']
 export const SettingTabs = ['profile', 'account', 'donate']
+
+export const slateInitialValue = [
+    {
+      type: 'paragraph',
+      children: [{ text: '' }],
+    },
+  ]

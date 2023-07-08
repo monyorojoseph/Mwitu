@@ -5,15 +5,24 @@ from taggit.serializers import (TagListSerializerField, TaggitSerializer)
 
 class CreateSiteSerializer(serializers.Serializer):
     cover_image = serializers.ImageField()
+    logo = serializers.ImageField()
     name = serializers.CharField()
     url = serializers.URLField()
-    about = serializers.CharField()
-    tags = serializers.ListField(
-        child=serializers.CharField()
-    )
+    about = serializers.JSONField()
+    tags = serializers.CharField()
 
     def create(self, validated_data):
-        return Site.objects.create(**validated_data)
+        site = Site.objects.create(**validated_data)
+        # stringTags = validated_data.get('tags')
+        # try:
+        #     listTags = stringTags.split(',')
+        #     print(type(listTags))
+        #     site.tags.add(t for t in listTags)
+        #     site.save_m2m()
+        # except Exception as e:
+        #     print(e)
+
+        return site
 
 class ListSiteSerializer(TaggitSerializer, serializers.ModelSerializer):
     tags = TagListSerializerField()
@@ -33,7 +42,7 @@ class ReviewSerializer(serializers.ModelSerializer):
         fields = ['id', 'full_name', 'image', 'comment', 'timestamp', 'rating', 'upvotes', 'downvotes']
 
 class PostReviewSerializer(serializers.Serializer):
-    comment = serializers.CharField()
+    comment = serializers.JSONField()
     rating = serializers.IntegerField()
     site_id = serializers.CharField()
 

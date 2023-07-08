@@ -6,7 +6,7 @@ export default function({children}: {children: JSX.Element}){
     return(
         <>
          <Head>
-            <title>Sites Mwitu</title>
+            <title>Mwitu</title>
             <link rel="icon" href="/favicon.ico" />
          </Head>
          

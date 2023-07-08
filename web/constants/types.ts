@@ -1,3 +1,5 @@
+import { Descendant } from "slate";
+
 export interface SiteCardType {
     id: string;
     name: string;
@@ -11,7 +13,7 @@ export interface SiteDetailsType {
     name: string;
     cover_image: string;
     logo: string;
-    about: string;
+    about: Descendant[];
     url: string;
     total_reviews: number;
     avg_rating: number;
@@ -28,7 +30,7 @@ export interface ReviewType {
     id: number
     full_name: string
     image: string
-    comment: string
+    comment: Descendant[]
     timestamp: Date
     rating: number
     upvotes: number

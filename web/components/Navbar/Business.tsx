@@ -26,10 +26,10 @@ const Business = ()=> {
                         Claim business                    
                     </span>
 
-                    <span onClick={()=>router.push('/soon')} 
+                    {/* <span onClick={()=>router.push('/soon')} 
                     className='hover:bg-SkyBlue w-full rounded-sm py-1 px-4 cursor-pointer'>                        
                         Create business account                    
-                    </span>
+                    </span> */}
                 </div>
             </Popover.Panel>
         </Popover>

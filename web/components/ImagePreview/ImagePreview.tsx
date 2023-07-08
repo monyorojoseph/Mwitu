@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { Images } from '@/constants/images';
 import { Texts } from '@/constants/text';
@@ -17,8 +16,8 @@ const ImagePreview = ()=> {
     return(
         <div className='relative'>
             <div className='w-full h-96'>
-                <Image src={Images[index]} alt='hey' 
-                className='h-full transition delay-300 duration-300 ease-in-out object-cover object-center'/>
+                <img src={Images[index].src} alt='hey' 
+                className='h-full w-full transition delay-300 duration-300 ease-in-out object-cover object-center'/>
             </div>
             <div className='absolute w-full h-96 top-0 bg-black bg-opacity-50 z-10 flex flex-row items-center'>
                 <div className=' w-9/12 mx-auto'>

@@ -6,6 +6,7 @@ import { toast } from "react-toastify"
 import { AxiosResponse } from "axios"
 import { monthDate } from "@/utils/date"
 import { BiDownvote, BiUpvote } from "react-icons/bi"
+import { ReadSlateNode } from "../SlateNode/SlateNode"
 
 const Review = ({review, recent}: {review: ReviewType; recent:boolean})=> {
     
@@ -23,7 +24,7 @@ const Review = ({review, recent}: {review: ReviewType; recent:boolean})=> {
     return (
         <div 
         className="rounded-sm border border-SkyBlue border-opacity-20 px-3 py-1.5 
-        space-y-3 shadow-md hover:shadow-lg">
+        space-y-2 shadow-md hover:shadow-lg">
             {/* name and time */}
             <div className="flex flex-row justify-between items-center">
                 <span className="flex flex-row justify-center items-center space-x-3">
@@ -38,8 +39,8 @@ const Review = ({review, recent}: {review: ReviewType; recent:boolean})=> {
                 <RatedBar stars={review.rating}/>
             </div>
             {/* review text */}
-            <div>
-                <p>{review.comment}</p>
+            <div className="">
+                <ReadSlateNode initialValue={review.comment} />
             </div>
             {/* action */}
             <div className="flex flex-row justify-start items-center space-x-2">

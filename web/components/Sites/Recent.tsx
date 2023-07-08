@@ -1,3 +1,4 @@
+import ZeroListing from "../Empty/ZeroListings";
 import ImagePreview from "../ImagePreview/ImagePreview"
 import Review from "../Review/Review";
 import { useRecentActivity } from "@/hooks/swr/listReviews";
@@ -21,7 +22,12 @@ const Recent = ()=> {
                             </div>
                         ))
                     }
-                </div>               
+                    
+                </div>  
+                {
+                    reviews?.length === 0 &&
+                    <ZeroListing message="No recent activites" />
+                }             
             </div>
         </section>
     )

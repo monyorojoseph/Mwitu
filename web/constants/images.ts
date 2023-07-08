@@ -6,6 +6,4 @@ import bulb from '../public/images/logo/bulb.jpg'
 import coverImg from '../public/images/coverImage/cover_img.jpg'
 
 
-const Images = [ img1, img2, img3,  img4]
-
-export { Images, bulb, coverImg }
+export { img1, img2, img3, img4, bulb, coverImg }

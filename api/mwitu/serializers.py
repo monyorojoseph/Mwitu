@@ -13,15 +13,8 @@ class CreateSiteSerializer(serializers.Serializer):
 
     def create(self, validated_data):
         site = Site.objects.create(**validated_data)
-        # stringTags = validated_data.get('tags')
-        # try:
-        #     listTags = stringTags.split(',')
-        #     print(type(listTags))
-        #     site.tags.add(t for t in listTags)
-        #     site.save_m2m()
-        # except Exception as e:
-        #     print(e)
-
+        stringTags = validated_data.get('tags').split(',')
+        site.tags.set(*stringTags)
         return site
 
 class ListSiteSerializer(TaggitSerializer, serializers.ModelSerializer):

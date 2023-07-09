@@ -2,8 +2,8 @@ import { SiteDetailsType } from '@/constants/types'
 import { fetcher } from '@/services/constant'
 import useSWR from 'swr'
 
-export const useSitesDetails = (id:string)=> {
-    const { data, isLoading } = useSWR(`/mwitu/site-details/${id}/`, fetcher)
+export const useSitesDetails = (slug:string)=> {
+    const { data, isLoading } = useSWR(`/mwitu/site-details/${slug}/`, fetcher)
     return { 
         site: data as SiteDetailsType, 
         loading: isLoading

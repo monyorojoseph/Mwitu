@@ -3,6 +3,8 @@ from django.db import models
 from django.core.validators import MaxValueValidator
 from django.db.models import Avg, Count
 from taggit.managers import TaggableManager
+from django_lifecycle import LifecycleModelMixin, hook, AFTER_CREATE
+from  django.utils.text import slugify
 
 def json_field_default():
     return [{
@@ -10,12 +12,13 @@ def json_field_default():
       'children': [{ 'text': '' }],
     }]
 
-class Site(models.Model):
-    name = models.CharField(max_length=200, unique=True)    # version 2.0 will be flex
-    url = models.URLField(max_length=250, unique=True)
+class Site(LifecycleModelMixin, models.Model):
+    name = models.CharField(max_length=50)    # version 2.0 will be flex
+    url = models.URLField(max_length=250, unique=True, null=True, blank=True)
     cover_image = models.ImageField(upload_to='sites/', null=True, blank=True)
     logo = models.ImageField(upload_to='sites/', null=True, blank=True)
-    created_by = models.ForeignKey('account.CustomUser', related_name='sites',   on_delete=models.SET_NULL, null=True)
+    created_by = models.ForeignKey('account.CustomUser', related_name='created_sites', on_delete=models.SET_NULL, null=True)
+    owned_by = models.ForeignKey('account.CustomUser', related_name='owned_sites', on_delete=models.SET_NULL, null=True)
     timestamp = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     tags = TaggableManager(blank=True, related_name='sites_tags')
@@ -26,11 +29,20 @@ class Site(models.Model):
 
     def __str__(self) -> str:
         return self.name
+    
+    @hook(AFTER_CREATE)
+    def create_slug(self) -> None:
+        slug = slugify(self.name, allow_unicode=True)
+        if Site.objects.filter(slug=slug).exists():
+            slug = f'{slug}-{self.id}'        
+        self.slug = slug
+        self.save()
+        return
 
-    def total_reviews(self):
+    def total_reviews(self) -> int:
         return self.site_reviews.count()
 
-    def avg_rating(self):
+    def avg_rating(self) -> float:
         return self.site_reviews.aggregate(Avg('rating'))['rating__avg']
 
 class ReviewManager(models.Manager):

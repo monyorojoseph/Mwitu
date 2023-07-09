@@ -9,11 +9,11 @@ export default function SiteCard({site}:{site: SiteCardType}){
 
     return(
         <>
-            <div key={site.id}
+            <div
             onClick={()=>{
                 router.push({
-                    pathname: '/site/[id]',
-                    query: { id: site.id },
+                    pathname: '/site/[slug]',
+                    query: { slug: site.slug },
                     })
             }} 
             className="border border-SkyBlue border-opacity-20 rounded-sm shadow-md hover:shadow-lg grid grid-cols-5 cursor-pointer">

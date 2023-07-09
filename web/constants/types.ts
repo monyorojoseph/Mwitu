@@ -1,7 +1,7 @@
 import { Descendant } from "slate";
 
 export interface SiteCardType {
-    id: string;
+    slug: string;
     name: string;
     logo: string;
     total_reviews: number;

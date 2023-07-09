@@ -16,12 +16,12 @@ const Business = ()=> {
 
             <Popover.Panel className="absolute z-50 shadow-md rounded-sm p-1 bg-white">
                 <div className="w-52 text-CaribbeanCurrent flex flex-col">
-                    <span onClick={()=>router.push('/site/add')} 
+                    <span onClick={()=>router.push('/site/add', undefined, { shallow: true })} 
                     className='hover:bg-SkyBlue w-full rounded-sm py-1 px-4 cursor-pointer'>                        
                         Add business                    
                     </span>
 
-                    <span onClick={()=>router.push('/soon')} 
+                    <span onClick={()=>router.push('/soon', undefined, { shallow: true })} 
                     className='hover:bg-SkyBlue w-full rounded-sm py-1 px-4 cursor-pointer'>                        
                         Claim business                    
                     </span>

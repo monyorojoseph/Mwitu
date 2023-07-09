@@ -1,3 +1,4 @@
+from django.shortcuts import get_object_or_404
 from rest_framework import serializers
 from .models import Site, Review
 from taggit.models import Tag
@@ -12,22 +13,23 @@ class CreateSiteSerializer(serializers.Serializer):
     tags = serializers.CharField()
 
     def create(self, validated_data):
-        site = Site.objects.create(**validated_data)
+        newSite = Site.objects.create(**validated_data)
         stringTags = validated_data.get('tags').split(',')
-        site.tags.set(*stringTags)
+        site = get_object_or_404(Site, id=newSite.id)
+        site.tags.add(*stringTags)
         return site
 
 class ListSiteSerializer(TaggitSerializer, serializers.ModelSerializer):
     tags = TagListSerializerField()
     class Meta:
         model = Site
-        fields = ['id', 'name', 'logo', 'total_reviews', 'avg_rating', 'tags']
+        fields = ['slug', 'name', 'logo', 'total_reviews', 'avg_rating', 'tags']
 
 class SiteSerializer(TaggitSerializer, serializers.ModelSerializer):
     tags = TagListSerializerField()
     class Meta:
         model = Site
-        fields = ['name', 'logo', 'cover_image', 'url', 'about', 'total_reviews', 'avg_rating', 'tags']
+        fields = ['slug', 'name', 'logo', 'cover_image', 'url', 'about', 'total_reviews', 'avg_rating', 'tags']
 
 class ReviewSerializer(serializers.ModelSerializer):
     class Meta:

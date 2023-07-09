@@ -5,12 +5,14 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { coverImg, bulb } from "@/constants/images";
-import Select from 'react-select';
+import CreatableSelect from 'react-select';
 import makeAnimated from 'react-select/animated';
 import { useTagList } from "@/hooks/swr/tagList";
 import { EditSlateNode } from "@/components/SlateNode/SlateNode";
 import { slateInitialValue } from "@/constants/values";
 import { Descendant } from "slate";
+import { HiLightBulb } from 'react-icons/hi'
+
 
 const animatedComponents = makeAnimated();
 
@@ -43,7 +45,12 @@ export default function Add(){
             setLoading(false)
             if(resp?.status === 201){
                 toast.success('Site added')
-                // router.push('/')
+                if(resp?.data?.slug) {
+                    router.push(`/site/${resp?.data?.slug}`)
+                } else{
+                    router.push(`/`)
+                }
+
             }
         }
  
@@ -54,6 +61,13 @@ export default function Add(){
         <Layout>
             <>
                 <section className="w-11/12 md:w-10/12 lg:w-8/12 mx-auto mt-5 mb-10 min-h-80vh">
+                    <div className="my-3 p-4 flex flex-row justify-start items-center space-x-5 bg-SkyBlue bg-opacity-10 rounded-md">
+                        <span><HiLightBulb className="text-OrangePeel text-lg"/></span>
+                        <span className="text-CaribbeanCurrent text-sm fo">
+                            <p>Anyone can add a business, as an owner or as a reviewer if your business is already listed you can claim it.</p>
+                            <p>Before adding a business check if it's listed first.</p>
+                        </span>
+                    </div>
                     {/* form */}
                     <form className="space-y-4" onSubmit={onSubmitHandler}>
 
@@ -104,7 +118,7 @@ export default function Add(){
 
                         <div>
                             <label className="block text-lg leading-6 text-CaribbeanCurrent">
-                                logo
+                                cover image
                             </label>
                             <div className="w-full h-36 relative mt-2">
                                 <img src={ cover_image ? URL.createObjectURL(cover_image) : coverImg.src } alt="alt cover img" 
@@ -158,9 +172,8 @@ export default function Add(){
                                 </label>
 
                                 <div className="mt-2">
-                                    <Select
-                                        className="basic-multi-select"
-                                        classNamePrefix="select"
+                                    <CreatableSelect
+                                        className="border-SkyBlue border rounded-md"
                                         isMulti
                                         // @ts-ignore
                                         onChange={(newValue)=> setSelectedTags(newValue.map((v)=> v.value))}
@@ -171,13 +184,14 @@ export default function Add(){
                                         options={tags ? tags?.map((tag)=> ({"label": tag.name, "value": tag.name})) : []}
                                     />
                                 </div>
+                                <small className="text-CaribbeanCurrent">you can select more that one that</small>
 
                             </div>
                         </div>
 
                         <div>
-                            <button type="submit" 
-                            className="py-1 px-4 rounded-md text-CaribbeanCurrent font-semibold border">
+                            <button type="submit"
+                            className="py-1 px-4 rounded-md text-CaribbeanCurrent font-semibold border w-full border-SkyBlue">
                                 {loading ? 'Adding' : 'Add' }
                             </button>
                         </div>

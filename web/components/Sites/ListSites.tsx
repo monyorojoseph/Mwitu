@@ -13,8 +13,8 @@ export default function ListSites(){
             <div className="w-9/12 mx-auto min-h-80vh my-6 space-y-3">
 
                 {!loading && (<div className="space-y-3">
-                    {(sites?.length > 0) && sites.map((site: SiteCardType) => (
-                        <SiteCard site={site} key={site.id} />
+                    {(sites?.length > 0) && sites.map((site: SiteCardType, index: number) => (
+                        <SiteCard site={site} key={index} />
                     ))}
                     {(sites?.length === 0) && <ZeroListing message="Nothing to see here"/>}
 

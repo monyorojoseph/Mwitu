@@ -62,7 +62,7 @@ const MyHam = ()=> {
                 {session && (
                     <div className="w-40 text-CaribbeanCurrent flex flex-col"> 
                         <span 
-                        onClick={()=> router.push('/settings')}
+                        onClick={()=> router.push('/settings', undefined, { shallow: true })}
                         className="px-4 hover:bg-SkyBlue rounded-sm cursor-pointer py-1.5">Profile</span> 
 
                         <span 

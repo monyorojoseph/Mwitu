@@ -24,14 +24,14 @@ import { Descendant } from "slate";
 
 export default function Site(){
     const router = useRouter()
-    const { id } = router.query;
+    const { slug } = router.query;
     const [ tab, setTab ] = useState<string>(SiteDetailsTabs[0])
 
 
     return(
         <Layout>
             <>
-                {id && 
+                {slug && 
                 (<section className="w-full">
                     <SiteHeader tab={tab} setTab={setTab} />
                     <div className="w-9/12 mx-auto min-h-80vh my-6 ">
@@ -47,8 +47,8 @@ export default function Site(){
 
 const SiteHeader = ({tab, setTab}:{tab: string; setTab: Function})=> {
     const router = useRouter()
-    const { id } = router.query;
-    const { site, loading } = useSitesDetails(id as string)
+    const { slug } = router.query;
+    const { site, loading } = useSitesDetails(slug as string)
 
     return(
         <div className="border-b border-SkyBlue border-opacity-20 shadow-sm">
@@ -95,8 +95,8 @@ const SiteHeader = ({tab, setTab}:{tab: string; setTab: Function})=> {
 
 function SiteDetails(){
     const router = useRouter()
-    const { id } = router.query;
-    const { site, loading } = useSitesDetails(id as string)
+    const { slug } = router.query;
+    const { site, loading } = useSitesDetails(slug as string)
     
     return(<>
     {!loading && (<div className="rounded-md space-y-3">
@@ -121,9 +121,9 @@ function SiteDetails(){
 function Reviews(){
 
     const router = useRouter()
-    const { id } = router.query;
+    const { slug } = router.query;
     const { filter, setFilter } = useReviewsContext()
-    const { reviews, loading } = useListReviews(id as string, filter.value)
+    const { reviews, loading } = useListReviews(slug as string, filter.value)
 
     return(
         <>

@@ -27,8 +27,9 @@ class CreateSiteAPI(APIView):
     def post(self, request, format=None):
         serializer = CreateSiteSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save(created_by=request.user)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            site = serializer.save(created_by=request.user)
+            siteSerializer = SiteSerializer(site)
+            return Response(siteSerializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -43,14 +44,14 @@ class ListSitesAPI(APIView):
     
 
 class SiteDetailsAPI(APIView):
-    def get(self, request, id, format=None):
-        site = get_object_or_404(Site, id=id)
+    def get(self, request, slug, format=None):
+        site = get_object_or_404(Site, slug=slug)
         serializer = SiteSerializer(site)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 class ListSiteReviewsAPI(APIView):
-    def get(self, request, site_id, filter, format=None):
-        site = get_object_or_404(Site, id=site_id)
+    def get(self, request, slug, filter, format=None):
+        site = get_object_or_404(Site, slug=slug)
         querysets = {
             'latest' : Review.mwitu.filter(site=site),
             'mostupvotes' : Review.mwitu.most_upvotes().filter(site=site),

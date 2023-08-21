@@ -5,3 +5,5 @@ Pillow==9.5.0
 psycopg2-binary==2.9.6
 djangorestframework-simplejwt==4.8.0
 google-api-python-client==2.85.0
+django-taggit==4.0.0
+django-lifecycle==1.0.0

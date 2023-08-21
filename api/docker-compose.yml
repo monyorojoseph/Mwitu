@@ -2,14 +2,14 @@ version: '3.8'
 
 services:
   api:
-    build: ./api
+    build: .
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
-      - ./api/:/usr/src/api/
+      - .:/usr/src/api/
     ports:
       - 8000:8000
     env_file:
-      - ./.env.prod
+      - .env
     depends_on:
       - db
 
@@ -17,10 +17,10 @@ services:
     image: postgres:15.2-alpine
     volumes:
       - postgres_data:/var/lib/postgresql/data/
-    environment:
-      - POSTGRES_USER=goblin
-      - POSTGRES_PASSWORD=goblin
-      - POSTGRES_DB=sites_mwitu_local
+    ports:
+      - 5432:5432
+    env_file:
+      - .env.db
 
 volumes:
   postgres_data:

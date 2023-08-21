@@ -1,0 +1,96 @@
+name: Mwitu CI
+
+on:
+  pull_request: 
+    branches:
+      - master      
+  workflow_dispatch:
+
+env:
+  DJANGO_WORKING_DIRECTORY: api
+  NEXT_WORKING_DIRECTORY: web
+  SECRET_KEY: get-a-life-0435457
+  ALLOWED_HOSTS: localhost 127.0.0.1
+  DEBUG: 1
+  DBNAME: postgres
+  DBHOST: localhost
+  DBUSER: postgres
+  DBPASS: postgres
+  CORS_ALLOWED_ORIGINS: http://localhost:3000 http://127.0.0.1:3000
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_PASSWORD: ${{ env.DBPASS }}
+        ports:
+          - 5432:5432
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install npm dependencies
+        working-directory: ${{ env.NEXT_WORKING_DIRECTORY }}
+        run: |
+          npm install
+
+      - name: Build Next app
+        working-directory: ${{ env.NEXT_WORKING_DIRECTORY }}
+        run: |
+          npm run build
+
+      - name: Set up Python version
+        uses: actions/setup-python@v1
+        with:
+          python-version: '3.11'
+
+      - name: Create and start virtual environment
+        run: |
+          python -m venv venv
+          source venv/bin/activate
+      
+      - name: Install dependencies
+        working-directory: ${{ env.DJANGO_WORKING_DIRECTORY }}      
+        run: pip install -r requirements.txt
+
+      - name: Run Migrations
+        working-directory: ${{ env.DJANGO_WORKING_DIRECTORY }}
+        run: |
+          python manage.py makemigrations
+          python manage.py migrate
+        env:
+          ALLOWED_HOSTS: ${{ env.ALLOWED_HOSTS }}
+          DEBUG: ${{ env.DEBUG }}
+          CORS_ALLOWED_ORIGINS: ${{ env.CORS_ALLOWED_ORIGINS }}
+          SECRET_KEY: ${{ env.SECRET_KEY }}
+          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+          SOCIAL_SECRET: ${{ secrets.SOCIAL_SECRET }}
+      
+      - name: Run Python tests
+        working-directory: ${{ env.DJANGO_WORKING_DIRECTORY }}
+        run: |
+          python manage.py test
+        env:
+          ALLOWED_HOSTS: ${{ env.ALLOWED_HOSTS }}
+          DEBUG: ${{ env.DEBUG }}
+          CORS_ALLOWED_ORIGINS: ${{ env.CORS_ALLOWED_ORIGINS }}
+          SECRET_KEY: ${{ env.SECRET_KEY }}
+          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+          SOCIAL_SECRET: ${{ secrets.SOCIAL_SECRET }}
+
+      - name: Run Django server
+        working-directory: ${{ env.DJANGO_WORKING_DIRECTORY }}
+        run: |
+          python manage.py runserver &
+        env:
+          ALLOWED_HOSTS: ${{ env.ALLOWED_HOSTS }}
+          DEBUG: ${{ env.DEBUG }}
+          CORS_ALLOWED_ORIGINS: ${{ env.CORS_ALLOWED_ORIGINS }}
+          SECRET_KEY: ${{ env.SECRET_KEY }}
+          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+          SOCIAL_SECRET: ${{ secrets.SOCIAL_SECRET }}

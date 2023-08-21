@@ -10,12 +10,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('SECRET_KEY', default='django-insecure-xd7od)3#$_@8y^80+h+s&x*-%9&oapi@n9k5m@qo!-&e(jha*^')
+SECRET_KEY = os.environ.get('SECRET_KEY', 'get-a-life')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DEBUG') in ['True', 'true', 't', '1']
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS').split(' ')
 
 
 # Application definition
@@ -89,12 +89,12 @@ WSGI_APPLICATION = 'setup.wsgi.application'
 
 DATABASES = {
     "default": {
-        "ENGINE": os.environ.get("SQL_ENGINE", "django.db.backends.postgresql"),
-        "NAME": os.environ.get("SQL_DATABASE", 'mwitu'),
-        "USER": os.environ.get("SQL_USER", "mwitu"),
-        "PASSWORD": os.environ.get("SQL_PASSWORD", "mwitu"),
-        "HOST": os.environ.get("SQL_HOST", "localhost"),
-        "PORT": os.environ.get("SQL_PORT", "5432"),
+        "ENGINE": os.environ.get("DB_ENGINE"),
+        "NAME": os.environ.get("DB_DATABASE"),
+        "USER": os.environ.get("DB_USER"),
+        "PASSWORD": os.environ.get("DB_PASSWORD"),
+        "HOST": os.environ.get("DB_HOST"),
+        "PORT": os.environ.get("DB_PORT"),
     }
 }
 
@@ -145,11 +145,7 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# CORS_ALLOWED_ORIGINS = [
-#     "http://localhost:3080",
-#     "http://127.0.0.1:3000",
-# ]
-CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOWED_ORIGINS = os.environ.get('CORS_ALLOWED_ORIGINS').split(' ')
 
-GOOGLE_CLIENT_ID = '539208888831-qiu7lb6jbgt6ucluhtcefmkl0lhmmv01.apps.googleusercontent.com'
-SOCIAL_SECRET = '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'
+GOOGLE_CLIENT_ID = os.environ.get('GOOGLE_CLIENT_ID')
+SOCIAL_SECRET = os.environ.get('SOCIAL_SECRET')

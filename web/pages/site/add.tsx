@@ -65,7 +65,7 @@ export default function Add(){
                         <span><HiLightBulb className="text-OrangePeel text-lg"/></span>
                         <span className="text-CaribbeanCurrent text-sm fo">
                             <p>Anyone can add a business, as an owner or as a reviewer if your business is already listed you can claim it.</p>
-                            <p>Before adding a business check if it's listed first.</p>
+                            <p>Before adding a business check if it&apos;s listed first.</p>
                         </span>
                     </div>
                     {/* form */}

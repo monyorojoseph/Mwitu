@@ -2,7 +2,7 @@ import Head from "next/head"
 import Footer from "../Footer/Footer"
 import Navbar from "../Navbar/Navbar"
 
-export default function({children}: {children: JSX.Element}){
+export default function Layout({children}: {children: JSX.Element}){
     return(
         <>
          <Head>

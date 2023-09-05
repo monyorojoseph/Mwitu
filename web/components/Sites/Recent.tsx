@@ -17,7 +17,7 @@ const Recent = ()=> {
                 <div className="mt-5 grid grid-cols-6 gap-1 items-center">
                     {
                         reviews?.map((review)=>(
-                            <div className="col-span-6 md:col-span-3 lg:col-span-2">
+                            <div key={review.id} className="col-span-6 md:col-span-3 lg:col-span-2">
                                 <Review recent={true} review={review} key={review.id} />
                             </div>
                         ))

@@ -1,4 +1,4 @@
-version: '3.8'
+version: '3.3'
 
 services:
   api:
@@ -26,7 +26,7 @@ services:
       - .env.staging.db
 
   nginx-proxy:
-    container_name: NGINX-PROXY
+    # container_name: NGINX-PROXY
     build: ./nginx
     restart: always
     ports:
@@ -44,6 +44,7 @@ services:
 
   acme-companion:
     image: nginxproxy/acme-companion
+    container_name: ACME-COMPANION
     env_file:
       - .env.staging.proxy-companion
     volumes:

@@ -154,5 +154,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ALLOWED_ORIGINS = os.environ.get('CORS_ALLOWED_ORIGINS').split(' ')
 
-GOOGLE_CLIENT_ID = os.environ.get('GOOGLE_CLIENT_ID')
-SOCIAL_SECRET = os.environ.get('SOCIAL_SECRET')
+GOOGLE_CLIENT_ID = os.environ.get('GOOGLE_ID')

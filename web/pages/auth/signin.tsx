@@ -33,11 +33,8 @@ export default function SignIn({ providers }: InferGetServerSidePropsType<typeof
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const session = await getServerSession(context.req, context.res, authOptions);
   
-  // If the user is already logged in, redirect.
-  // Note: Make sure not to redirect to the same page
-  // To avoid an infinite loop!
   if (session) {
-    return { redirect: { destination: "/" } };
+    return { redirect: { destination: context?.query?.callbackUrl} };
   }
 
   const providers = await getProviders();

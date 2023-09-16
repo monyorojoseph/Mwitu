@@ -24,17 +24,11 @@ class GoogleOAuthSerializer(serializers.Serializer):
             )
         else:
             if user_data['aud'] != settings.GOOGLE_CLIENT_ID:
-                print(user_data['aud'] != settings.GOOGLE_CLIENT_ID)
-                print(user_data['aud'], settings.GOOGLE_CLIENT_ID)
-
-
                 raise AuthenticationFailed('oops, who are you?')
 
             email = user_data['email']
             name = user_data['name']
             provider = 'google'
-            print(email, name)
-
             return register_social_user(
                 provider=provider, email=email, name=name)
 

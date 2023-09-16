@@ -101,7 +101,12 @@ class RecentActivityAPI(APIView):
 class TagListAPI(APIView):
     permission_classes = []
     def get(self, request, format=None):
-        queryset = Tag.objects.all()
+        c = request.query_params.get('c', None)
+        if c:
+            queryset = Tag.objects.filter(name__icontains=c)
+        else:
+            queryset = Tag.objects.all()
+            
         serializer = CustomTagSerializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     

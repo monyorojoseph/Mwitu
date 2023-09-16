@@ -13,10 +13,13 @@ class CreateSiteSerializer(serializers.Serializer):
     tags = serializers.CharField()
 
     def create(self, validated_data):
+        # extract tags and split them
+        tags = validated_data.pop('tags', None)
         newSite = Site.objects.create(**validated_data)
-        stringTags = validated_data.get('tags').split(',')
-        site = get_object_or_404(Site, id=newSite.id)
-        site.tags.add(*stringTags)
+        if tags:
+            tags = tags.split(' ')
+            site = get_object_or_404(Site, id=newSite.id)
+            site.tags.add(*tags)
         return site
 
 class ListSiteSerializer(TaggitSerializer, serializers.ModelSerializer):

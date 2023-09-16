@@ -5,30 +5,29 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { coverImg, bulb } from "@/constants/images";
-import CreatableSelect from 'react-select';
-import makeAnimated from 'react-select/animated';
-import { useTagList } from "@/hooks/swr/tagList";
+import AsyncCreatableSelect from 'react-select/async-creatable';
 import { EditSlateNode } from "@/components/SlateNode/SlateNode";
 import { slateInitialValue } from "@/constants/values";
 import { Descendant } from "slate";
 import { HiLightBulb } from 'react-icons/hi'
-
-
-const animatedComponents = makeAnimated();
-
+import { fetcher } from "@/services/constant";
+import { Tag } from "@/constants/types";
+import { MultiValue } from "react-select";
 
 export default function Add(){
     const router = useRouter()
-    const { tags } = useTagList()
     const [ loading, setLoading ] = useState<boolean>(false)
     const [ about, setAbout ] = useState<Descendant[]>(slateInitialValue)
-    const [ selectedTags, setSelectedTags ] = useState<string[]>([])
+    const [ selectedTags, setSelectedTags ] = useState<MultiValue<{ label: string; value: string; }>>()
     const [ name, setName ] = useState<string>()
     const [ url, setUrl ] = useState<string>()
     const [ logo, setLogo ] = useState<File>()
     const [ cover_image, setCoverImage ] = useState<File>()
 
-
+    const filterTags =async (value:string) => {
+        const response = await fetcher(`/mwitu/tags/?c=${value}`) as Tag[]
+        return response?.map((tg)=> ({"label": tg.name, "value": tg.name}))
+    }
 
     const onSubmitHandler = async(e: React.SyntheticEvent)=> {
         e.preventDefault()
@@ -40,7 +39,7 @@ export default function Add(){
             formData.append('logo', logo)
             formData.append('cover_image', cover_image)
             formData.append('about', JSON.stringify(about))
-            formData.append('tags', selectedTags.toString())
+            formData.append('tags', selectedTags?.map((value)=> value?.label).toString())
             const resp = await createSite(formData) as AxiosResponse;
             setLoading(false)
             if(resp?.status === 201){
@@ -172,16 +171,13 @@ export default function Add(){
                                 </label>
 
                                 <div className="mt-2">
-                                    <CreatableSelect
-                                        className="border-SkyBlue border rounded-md"
+                                    <AsyncCreatableSelect
                                         isMulti
-                                        // @ts-ignore
-                                        onChange={(newValue)=> setSelectedTags(newValue.map((v)=> v.value))}
-                                        components={animatedComponents}
-                                        isClearable={true}
-                                        isSearchable={true}
-                                        name="tags"
-                                        options={tags ? tags?.map((tag)=> ({"label": tag.name, "value": tag.name})) : []}
+                                        cacheOptions
+                                        defaultOptions
+                                        loadOptions={filterTags}
+                                        isClearable
+                                        onChange={(newValue: MultiValue<{ label: string; value: string; }>)=> setSelectedTags(newValue) }
                                     />
                                 </div>
                                 <small className="text-CaribbeanCurrent">you can select more that one that</small>

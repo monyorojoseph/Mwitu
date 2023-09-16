@@ -8,3 +8,4 @@ google-api-python-client==2.85.0
 django-taggit==4.0.0
 django-lifecycle==1.0.0
 gunicorn==21.2.0
+python-dotenv==1.0.0

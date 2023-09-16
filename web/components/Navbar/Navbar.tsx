@@ -1,26 +1,32 @@
-import { HiLightBulb } from 'react-icons/hi'
 import { BiSearch } from 'react-icons/bi';
 import { useSitesContext } from '@/hooks/contexts/sitesContext';
 import { ContentTypes } from '@/constants/types';
 import Business from './Business';
 import MyHam from './MyHam';
-import { useRouter } from 'next/router';
 import { useTagList } from '@/hooks/swr/tagList';
-
+import Link from 'next/link';
+import Icon from '../../public/images/logo/potato-icon.png'
 
 export default function Navbar(){
     const { content, setContent, setCategory, category } = useSitesContext()
     const { tags } = useTagList()
-    const router = useRouter()
     return(
         <nav className='bg-CaribbeanCurrent text-Isabeline pt-2 top-0 w-full sticky z-50'>
             <div className='container mx-auto'>
                 {/* actions */}
                 <div className='mt-1.5 grid grid-cols-12 gap-4'>
                     <div className='col-span-11 md:col-span-8 flex flex-row justify-between items-center'>
-                        <span className='mx-3 px-2' onClick={()=> router.push('/')}>
-                            <HiLightBulb className='text-3xl text-OrangePeel cursor-pointer fill-PrincetonOrange'/>
+                        <span>
+                            <Link href={'/'}>
+                                <span className='flex flex-row items-center space-x-2 mr-3'>
+                                    <span className='h-10 w-10'>                            
+                                        <img src={Icon.src} alt="Mwitu Icon" className='object-cover object-center h-full w-full' />
+                                    </span>
+                                    <h6 className='text-lg font-semibold'>Mwitu</h6>
+                                </span>
+                            </Link>
                         </span>
+
 
                         <span className='w-full rounded-lg bg-white flex flex-row justify-center items-center'>
                             <input type="text" name="q"
@@ -49,23 +55,23 @@ export default function Navbar(){
                 <div className='mt-2.5 flex flex-row justify-start items-center overflow-x-auto'>
                     <span
                     onClick={()=> {
-                        router.push('/')
                         setContent(ContentTypes.RECENT)
                     }}
                     className={`${ content === ContentTypes.RECENT && 'border-b-2 border-OrangePeel' } 
                     py-1 px-1.5 cursor-pointer`}>
-                        Recent</span>
+                        <Link href={'/'}>Recent</Link></span>
                     <div className='border h-6 mx-3' />
                     {
                         tags?.map((tag, key)=> (
                             <span key={key}
                             onClick={()=> {
-                                router.push(`/?tag=${tag.name}`, undefined, { shallow: true })
                                 setContent(ContentTypes.CATEGORY)
                                 setCategory(tag.name)                                
                             }}
                             className={`${ (content === ContentTypes.CATEGORY && category === tag.name ) && 'border-b-2 border-OrangePeel' } 
-                            py-1 px-1.5 cursor-pointer`}>{tag.name}</span>
+                            py-1 px-1.5 cursor-pointer`}>
+                                <Link href={`/?tag=${tag.name}`}>{tag.name}</Link>
+                            </span>
                         ))
                     }
                 </div>

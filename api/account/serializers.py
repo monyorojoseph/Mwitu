@@ -22,16 +22,21 @@ class GoogleOAuthSerializer(serializers.Serializer):
             raise serializers.ValidationError(
                 'The token is invalid or expired. Please login again.'
             )
-        if user_data['aud'] != settings.GOOGLE_CLIENT_ID:
+        else:
+            if user_data['aud'] != settings.GOOGLE_CLIENT_ID:
+                print(user_data['aud'] != settings.GOOGLE_CLIENT_ID)
+                print(user_data['aud'], settings.GOOGLE_CLIENT_ID)
 
-            raise AuthenticationFailed('oops, who are you?')
 
-        email = user_data['email']
-        name = user_data['name']
-        provider = 'google'
+                raise AuthenticationFailed('oops, who are you?')
 
-        return register_social_user(
-            provider=provider, email=email, name=name)
+            email = user_data['email']
+            name = user_data['name']
+            provider = 'google'
+            print(email, name)
+
+            return register_social_user(
+                provider=provider, email=email, name=name)
 
 class ProfileSerializer(serializers.ModelSerializer):
     class Meta:

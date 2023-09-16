@@ -33,11 +33,13 @@ const MyHam = ()=> {
     }, [session])
 
     const handleSignOut = async()=> {
-        //@ts-ignore
-        const response = await logout({refresh: session.refresh})
-        if (response?.status === 200){
-            signOut()            
-        }
+        signOut()            
+
+        // //@ts-ignore
+        // const response = await logout({refresh: session.refresh})
+        // if (response?.status === 200){
+        //     signOut()            
+        // }
     }
 
     return(

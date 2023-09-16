@@ -11,10 +11,14 @@ class GoogleOAuthAPI(APIView):
     serializer_class = GoogleOAuthSerializer
 
     def post(self, request, format=None):
-        serializer = self.serializer_class(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        data = ((serializer.validated_data)['auth_token'])
-        return Response(data, status=status.HTTP_200_OK)
+        try:
+            serializer = self.serializer_class(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            data = ((serializer.validated_data)['auth_token'])
+            return Response(data, status=status.HTTP_200_OK)
+        except Exception as e:
+            print(e)
+            return Response(status = status.HTTP_400_BAD_REQUEST)
 
 class LogoutAPI(APIView):
     permission_classes = [ IsAuthenticated ]
